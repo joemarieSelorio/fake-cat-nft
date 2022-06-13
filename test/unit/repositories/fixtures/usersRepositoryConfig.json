@@ -1,0 +1,19 @@
+{
+  "id": "12345-12345-12345",
+  "firstName": "joemarie",
+  "lastName": "selorio",
+  "username": "jcselorio",
+  "email": "seloriojoemarie@gmail.com",
+  "password": "testPassword",
+
+  "createUserReponse": [0,1,2,3,4,5,6],
+  "getUserResponse": {
+    "uuid": "12345-12345-12345",
+    "first_name": "joemarie",
+    "last_name": "selorio",
+    "username":"jcselorio",
+    "email_address":"seloriojoemarie@gmail.com",
+    "created_at": "2022-06-13T15:55:26.046Z",
+    "last_updated_at": "2022-06-13T15:55:26.046Z"
+  }
+}

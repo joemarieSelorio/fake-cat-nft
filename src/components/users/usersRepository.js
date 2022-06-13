@@ -29,6 +29,8 @@ async function createNewUser(
   const METHOD = '[createUser]';
   logger.info(`${TAG} ${METHOD}`);
 
+  // use bcrypt salt for password
+
   const newUser = {
     uuid: id,
     first_name: firstName,
@@ -51,15 +53,13 @@ async function getUserByUuid(
   const METHOD = '[getUserByUuid]';
   logger.info(`${TAG} ${METHOD}`);
 
-  const user = await knex(USERS_TABLE).where({uuid}).first();
-
-  console.log(user);
+  const user = await knex.where({uuid}).from(USERS_TABLE).first();
 
   return {
     id: user.uuid,
-    first_name: user.first_name,
-    last_name: user.last_name,
-    username: user.user_name,
+    firstName: user.first_name,
+    lastName: user.last_name,
+    username: user.username,
     email: user.email_address,
     createdAt: user.created_at,
     lastUpdatedAt: user.last_updated_at,
@@ -76,13 +76,16 @@ async function getUserByEmail(
   const METHOD = '[getUserByUuid]';
   logger.info(`${TAG} ${METHOD}`);
 
-  const user = await knex(USERS_TABLE).where({email_address: email}).first();
+  const user = await knex
+      .where({email_address: email})
+      .from(USERS_TABLE)
+      .first();
 
   return {
     id: user.uuid,
-    first_name: user.first_name,
-    last_name: user.last_name,
-    username: user.user_name,
+    firstName: user.first_name,
+    lastName: user.last_name,
+    username: user.username,
     email: user.email_address,
     createdAt: user.created_at,
     lastUpdatedAt: user.last_updated_at,
