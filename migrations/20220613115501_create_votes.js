@@ -1,8 +1,8 @@
 require('dotenv').config();
-const {USERS_TABLE} = process.env;
+const {VOTES_TABLE} = process.env;
 
 exports.up = function(knex, Promise) {
-  return knex.schema.createTable(USERS_TABLE, function(t) {
+  return knex.schema.createTable(VOTES_TABLE, function(t) {
     t.string('uuid').primary();
     t.string('asset_id', 64).notNullable();
     t.string('user_id', 64).notNullable();
@@ -12,6 +12,6 @@ exports.up = function(knex, Promise) {
   });
 };
 exports.down = function(knex, Promise) {
-  return knex.schema.dropTableIfExists(USERS_TABLE);
+  return knex.schema.dropTableIfExists(VOTES_TABLE);
 };
 
