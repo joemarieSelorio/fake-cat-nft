@@ -1,0 +1,42 @@
+{
+  "name": "fake-cat-nft",
+  "version": "1.0.0",
+  "description": "Fake Cat NTFs for cat lovers",
+  "main": "index.js",
+  "scripts": {
+    "coverage": "nyc _mocha --recursive tests",
+    "lint": "eslint --ext .js",
+    "lint:fix": "eslint --ext .js --fix",
+    "test": "mocha --recursive test/unit",
+    "db:latest": "knex migrate:latest",
+    "db:rollback": "knex migrate:rollback",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joemarieSelorio/fake-cat-nft.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/joemarieSelorio/fake-cat-nft/issues"
+  },
+  "homepage": "https://github.com/joemarieSelorio/fake-cat-nft#readme",
+  "devDependencies": {
+    "app-module-path": "^2.2.0",
+    "app-root-path": "^3.0.0",
+    "chai": "^4.3.6",
+    "chai-as-promised": "^7.1.1",
+    "dotenv": "^16.0.1",
+    "eslint": "^8.17.0",
+    "eslint-config-google": "^0.14.0",
+    "mocha": "^10.0.0",
+    "proxyquire": "^2.1.3",
+    "sinon": "^14.0.0",
+    "winston": "^3.7.2"
+  },
+  "dependencies": {
+    "knex": "^2.1.0",
+    "mysql": "^2.18.1"
+  }
+}

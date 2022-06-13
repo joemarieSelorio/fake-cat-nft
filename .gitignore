@@ -1,0 +1,17 @@
+# package directories
+node_modules
+jspm_packages
+
+# Serverless directories
+.serverless
+
+.env
+.npmrc
+serverless.env.yml
+serverless.secrets.env.yml
+.DS_Store
+logs/
+.nyc_output/
+.webpack/
+coverage
+
