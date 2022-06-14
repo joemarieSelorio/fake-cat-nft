@@ -192,6 +192,27 @@ async function getUserGalleryById(
   return false;
 }
 
+/**
+ * Get fake nft details
+ * @param {string} uuid - Asset's unique identification
+ * @param {Object} dataToUpdate - Key value pair of fields to be updated
+ * @param {boolean} value - New value
+ */
+async function updateUserDetails(
+    uuid,
+    dataToUpdate,
+) {
+  const METHOD = '[updateUserDetails]';
+  logger.info(`${TAG} ${METHOD}`);
+
+  return await knex
+      .where({
+        uuid,
+      })
+      .update(dataToUpdate)
+      .from(ASSETS_TABLE);
+}
+
 
 module.exports = {
   createNewUser,
@@ -201,4 +222,5 @@ module.exports = {
   getUserAssets,
   getUserAsset,
   getUserGalleryById,
+  updateUserDetails,
 };

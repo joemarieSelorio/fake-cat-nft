@@ -8,13 +8,20 @@ const {
   getAssetByUuid,
   updateAssetStatus,
   createAssetOffer,
-  getAssetOffers,
+  getAllAssetOffers,
+  getAssetOffer,
 } = require('src/components/assets/assetsRepository');
 const {
   getUserAsset,
   getUserGalleryById,
   getUserWalletByUserId,
 } = require('src/components/users/usersRepository');
+const {
+  updateWalletByUserId,
+} = require('src/components/wallets/walletsRepository');
+const {
+  updateOffer,
+} = require('src/components/offers/offersRepository');
 const {createFakeCatNFT} = require('src/utilities/fakeNFTCatsUtil');
 const HttpSuccess = require('src/responses/httpSuccess');
 const UnauthorizedError = require('src/responses/unauthorizedError');
@@ -218,7 +225,7 @@ async function getOffers(req, res, next) {
       return next(new BadRequestError('asset not found'));
     }
 
-    const offers = await getAssetOffers(
+    const offers = await getAllAssetOffers(
         assetId,
     );
 
@@ -235,11 +242,86 @@ async function getOffers(req, res, next) {
   }
 }
 
+/**
+ * Controller for request to accept offer
+ * @param {Object} req - The request object
+ * @param {Object} res - The response object
+ * @param {Function} next - The next function to execute
+ */
+async function acceptOffer(req, res, next) {
+  const METHOD = '[acceptOffer]';
+
+  logger.info(`${TAG} ${METHOD}`);
+  try {
+    const {assetId, offerId} = req.params;
+    const user = req.user;
+
+    if (!user) {
+      return next(new UnauthorizedError('Unauthorized'));
+    }
+
+    const asset = await getUserAsset(user.id, assetId);
+
+    if (!asset) {
+      return next(new BadRequestError('asset not found'));
+    }
+
+    const offer = await getAssetOffer(asset.id, offerId);
+
+    if (!offer) {
+      return next(new BadRequestError('offer not found'));
+    }
+
+    const [offerOwnerWallet, assetOwnerWallet] = Promise.all(
+        getUserWalletByUserId(offer.offerOwner),
+        getUserWalletByUserId(user.id),
+    );
+
+    const newOfferOwnerAmount = offerOwnerWallet.amount - offer.amount;
+    const newAssetOwnerAmount = assetOwnerWallet.amount + offer.amount;
+
+
+    await updateWalletByUserId(offer.offerOwner, {
+      amount: newOfferOwnerAmount,
+    });
+
+    await updateWalletByUserId(user.id, {
+      amount: newAssetOwnerAmount,
+    });
+
+    await updateOffer(offer.id, {
+      accepted: true,
+    });
+
+
+    await updateAssetStatus(
+        asset.id,
+        {
+          owner_id: offer.offerOwner,
+          auctioned: false,
+          gallery_id: null,
+          current_amount: offer.amountOffered,
+        },
+    );
+
+    res.locals.respObj = new HttpSuccess(
+        200,
+        'Successfully accepted offer',
+    );
+
+    next();
+  } catch (err) {
+    logger.error(`${TAG} ${METHOD} ${err}`);
+    next(new HttpError('Failed to retrieve offers'));
+  }
+}
+
 
 module.exports = {
   createAsset,
   updateAsset,
   createOffer,
   getOffers,
+  acceptOffer,
 };
 

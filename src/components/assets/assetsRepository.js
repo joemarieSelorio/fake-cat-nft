@@ -65,14 +65,12 @@ async function getAssetByUuid(
 /**
  * Get fake nft details
  * @param {string} uuid - Asset's unique identification
- * @param {string} galleryId - Asset's unique identification
- * @param {boolean} status - Status if auctioned or not
-
+ * @param {Object} dataToUpdate - Key value pair of fields to be updated
+ * @param {boolean} value - New value
  */
 async function updateAssetStatus(
     uuid,
-    galleryId,
-    status,
+    dataToUpdate,
 ) {
   const METHOD = '[updateAssetStatus]';
   logger.info(`${TAG} ${METHOD}`);
@@ -81,10 +79,7 @@ async function updateAssetStatus(
       .where({
         uuid,
       })
-      .update({
-        auctioned: status,
-        gallery_id: galleryId,
-      })
+      .update(dataToUpdate)
       .from(ASSETS_TABLE);
 }
 
@@ -120,7 +115,7 @@ async function createAssetOffer(
  * Fetch all asset's offer
  * @param {string} assetId - Asset's id
  */
-async function getAssetOffers(
+async function getAllAssetOffers(
     assetId,
 ) {
   const METHOD = '[getAssetOffers]';
@@ -142,11 +137,42 @@ async function getAssetOffers(
   });
 }
 
+/**
+ * Fetch all asset's offer
+ * @param {string} assetId - Asset's id
+ * @param {string} offerId - Asset's id
+ */
+async function getAssetOffer(
+    assetId,
+    offerId,
+) {
+  const METHOD = '[getAssetOffer]';
+  logger.info(`${TAG} ${METHOD}`);
+
+  const offer = await knex
+      .where({
+        uuid: offerId,
+        asset_id: assetId,
+      })
+      .from(OFFERS_TABLE)
+      .first();
+
+  return {
+    id: offer.uuid,
+    offerOwner: offer.offer_owner,
+    amountOffered: offer.amount_offer,
+    accepted: Boolean(offer.accepted),
+    createdAt: offer.created_at,
+    lastUpdatedAt: offer.lastUpdated_at,
+  };
+}
+
 
 module.exports = {
   createNewAsset,
   getAssetByUuid,
   updateAssetStatus,
   createAssetOffer,
-  getAssetOffers,
+  getAllAssetOffers,
+  getAssetOffer,
 };
