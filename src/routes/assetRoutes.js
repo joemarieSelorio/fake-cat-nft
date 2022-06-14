@@ -7,6 +7,7 @@ const {
   updateAsset,
   createOffer,
   getOffers,
+  acceptOffer,
 } = require('src/components/assets/assetsController');
 const {
   authorize,
@@ -32,6 +33,11 @@ assetsRouters.post('/assets/:assetId/offers',
 assetsRouters.get('/assets/:assetId/offers',
     authorize,
     getOffers,
+);
+
+assetsRouters.patch('/assets/:assetId/offers/:offerId',
+    authorize,
+    acceptOffer,
 );
 
 

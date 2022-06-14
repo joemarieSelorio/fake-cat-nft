@@ -8,9 +8,11 @@ const {
   createNewUser,
   getUserByUuid,
   getUserWalletByUserId,
+  getAllUserAssets,
 } = require('src/components/users/usersRepository');
 const HttpSuccess = require('src/responses/httpSuccess');
 const HttpError = require('src/responses/httpError');
+const BadRequestError = require('src/responses/badRequestError');
 const logger = require('src/utilities/loggerUtil');
 
 const TAG = '[usersController]';
@@ -72,11 +74,13 @@ async function getUserWallet(req, res, next) {
   logger.info(`${TAG} ${METHOD}`);
 
   try {
-    const {
-      id,
-    } = req.params;
+    const {id} = req.params;
 
     const wallet = await getUserWalletByUserId(id);
+
+    if (!wallet) {
+      return next(new BadRequestError('wallet not found'));
+    }
 
     res.locals.respObj = new HttpSuccess(
         200,
@@ -91,8 +95,40 @@ async function getUserWallet(req, res, next) {
   }
 }
 
+/**
+ * Controller for request to create new user
+ * @param {Object} req - The request object
+ * @param {Object} res - The response object
+ * @param {Function} next - The next function to execute
+ */
+async function getUserAssets(req, res, next) {
+  const METHOD = '[getUserAssets]';
+
+  logger.info(`${TAG} ${METHOD}`);
+
+  try {
+    const {
+      id,
+    } = req.params;
+
+    const assets = await getAllUserAssets(id);
+
+    res.locals.respObj = new HttpSuccess(
+        200,
+        'Successfully retrieved user assets',
+        {assets},
+    );
+
+    next();
+  } catch (err) {
+    logger.error(`${TAG} ${METHOD} ${err}`);
+    next(new HttpError('Failed to retrieve user assets'));
+  }
+}
+
 module.exports = {
   createUser,
   getUserWallet,
+  getUserAssets,
 };
 

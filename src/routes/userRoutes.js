@@ -5,6 +5,7 @@ const express = require('express');
 const {
   createUser,
   getUserWallet,
+  getUserAssets,
 } = require('src/components/users/usersController');
 const {
   authorize,
@@ -13,14 +14,18 @@ const {
 
 const userRouters = new express.Router();
 
-userRouters.post('/users',
-    createUser,
-);
-
 userRouters.get('/users/:id/wallets',
     authorize,
     getUserWallet,
 );
 
+userRouters.get('/users/:id/assets',
+    authorize,
+    getUserAssets,
+);
+
+userRouters.post('/users',
+    createUser,
+);
 
 module.exports = userRouters;

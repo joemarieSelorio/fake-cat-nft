@@ -30,7 +30,7 @@ const HttpError = require('src/responses/httpError');
 const logger = require('src/utilities/loggerUtil');
 
 
-const TAG = '[assetsRepository]';
+const TAG = '[assetsController]';
 
 /**
  * Controller for request to create user gallery
@@ -123,8 +123,10 @@ async function updateAsset(req, res, next) {
 
     await updateAssetStatus(
         assetId,
-        gallery.id,
-        status,
+        {
+          gallery_id: gallery.id,
+          auctioned: status,
+        },
     );
 
     const result = await getAssetByUuid(
@@ -172,7 +174,7 @@ async function createOffer(req, res, next) {
       return next(new BadRequestError('user has no wallet'));
     }
 
-    const asset = await getUserAsset(user.id, assetId);
+    const asset = await getAssetByUuid(assetId);
 
     if (!asset) {
       return next(new BadRequestError('asset not found'));
@@ -272,13 +274,15 @@ async function acceptOffer(req, res, next) {
       return next(new BadRequestError('offer not found'));
     }
 
-    const [offerOwnerWallet, assetOwnerWallet] = Promise.all(
-        getUserWalletByUserId(offer.offerOwner),
-        getUserWalletByUserId(user.id),
+    const [offerOwnerWallet, assetOwnerWallet] = await Promise.all([
+      getUserWalletByUserId(offer.offerOwner),
+      getUserWalletByUserId(user.id)],
     );
 
-    const newOfferOwnerAmount = offerOwnerWallet.amount - offer.amount;
-    const newAssetOwnerAmount = assetOwnerWallet.amount + offer.amount;
+    console.log(offerOwnerWallet.amount, ' ', offer.amountOffered);
+    console.log(assetOwnerWallet.amount, ' ', offer.amountOffered);
+    const newOfferOwnerAmount = offerOwnerWallet.amount - offer.amountOffered;
+    const newAssetOwnerAmount = assetOwnerWallet.amount + offer.amountOffered;
 
 
     await updateWalletByUserId(offer.offerOwner, {
@@ -297,7 +301,7 @@ async function acceptOffer(req, res, next) {
     await updateAssetStatus(
         asset.id,
         {
-          owner_id: offer.offerOwner,
+          user_id: offer.offerOwner,
           auctioned: false,
           gallery_id: null,
           current_amount: offer.amountOffered,
@@ -312,7 +316,7 @@ async function acceptOffer(req, res, next) {
     next();
   } catch (err) {
     logger.error(`${TAG} ${METHOD} ${err}`);
-    next(new HttpError('Failed to retrieve offers'));
+    next(new HttpError('Failed to accept offers'));
   }
 }
 

@@ -105,20 +105,24 @@ async function getUserWalletByUserId(
       .from(WALLETS_TABLE)
       .first();
 
-  return {
-    userId: wallet.user_id,
-    amount: wallet.amount,
-  };
+  if (wallet) {
+    return {
+      userId: wallet.user_id,
+      amount: wallet.amount,
+    };
+  }
+
+  return false;
 }
 
 /**
  * Fetch all user's asset
  * @param {string} userId - User's email
  */
-async function getUserAssets(
+async function getAllUserAssets(
     userId,
 ) {
-  const METHOD = '[getUserAssets]';
+  const METHOD = '[getAllUserAssets]';
   logger.info(`${TAG} ${METHOD}`);
 
   const assets = await knex
@@ -154,15 +158,19 @@ async function getUserAsset(
       .from(ASSETS_TABLE)
       .first();
 
-  return {
-    id: asset.uuid,
-    name: asset.name,
-    auctioned: asset.auctioned,
-    initialAmount: asset.initialAmount,
-    currentAmount: asset.current_amount,
-    createdAt: asset.created_at,
-    lastUpdatedAt: asset.lastUpdated_at,
-  };
+  if (asset) {
+    return {
+      id: asset.uuid,
+      name: asset.name,
+      auctioned: asset.auctioned,
+      initialAmount: asset.initialAmount,
+      currentAmount: asset.current_amount,
+      createdAt: asset.created_at,
+      lastUpdatedAt: asset.lastUpdated_at,
+    };
+  }
+
+  return false;
 }
 
 /**
@@ -219,7 +227,7 @@ module.exports = {
   getUserByEmail,
   getUserByUuid,
   getUserWalletByUserId,
-  getUserAssets,
+  getAllUserAssets,
   getUserAsset,
   getUserGalleryById,
   updateUserDetails,
