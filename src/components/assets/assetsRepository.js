@@ -1,12 +1,12 @@
 require('app-module-path').addPath(require('app-root-path').toString());
 require('dotenv').config();
 
+const {map} = require('lodash');
 const knex = require('knex')(require('knexfile'));
-
 
 const logger = require('src/utilities/loggerUtil');
 
-const {ASSETS_TABLE} = process.env;
+const {ASSETS_TABLE, OFFERS_TABLE} = process.env;
 const TAG = '[assetsRepository]';
 
 /**
@@ -89,10 +89,64 @@ async function updateAssetStatus(
 }
 
 
-// should create get vote via asset id to retrieve asset's vote
+/**
+ * Creates offer for the auctioned fake NFT
+ * @param {string} uuid - Offer's unique identification
+ * @param {string} assetId - Asset's  uuid
+ * @param {string} offerOwnerId - Offer owner's uuid
+ * @param {number} offeredAmount - Offered amount
+ */
+async function createAssetOffer(
+    uuid,
+    assetId,
+    offerOwnerId,
+    offeredAmount,
+) {
+  const METHOD = '[createAssetOffer]';
+  logger.info(`${TAG} ${METHOD}`);
+
+
+  const newOffer = {
+    uuid,
+    asset_id: assetId,
+    offer_owner: offerOwnerId,
+    amount_offer: offeredAmount,
+  };
+
+  return await knex.insert(newOffer).into(OFFERS_TABLE);
+}
+
+/**
+ * Fetch all asset's offer
+ * @param {string} assetId - Asset's id
+ */
+async function getAssetOffers(
+    assetId,
+) {
+  const METHOD = '[getAssetOffers]';
+  logger.info(`${TAG} ${METHOD}`);
+
+  const offers = await knex
+      .where({asset_id: assetId})
+      .from(OFFERS_TABLE);
+
+  return map(offers, (offer) => {
+    return {
+      id: offer.uuid,
+      offerOwner: offer.offer_owner,
+      AmountOffer: offer.amount_offer,
+      accepted: Boolean(offer.accepted),
+      createdAt: offer.created_at,
+      lastUpdatedAt: offer.lastUpdated_at,
+    };
+  });
+}
+
 
 module.exports = {
   createNewAsset,
   getAssetByUuid,
   updateAssetStatus,
+  createAssetOffer,
+  getAssetOffers,
 };

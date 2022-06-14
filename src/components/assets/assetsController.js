@@ -7,10 +7,13 @@ const {
   createNewAsset,
   getAssetByUuid,
   updateAssetStatus,
+  createAssetOffer,
+  getAssetOffers,
 } = require('src/components/assets/assetsRepository');
 const {
   getUserAsset,
   getUserGalleryById,
+  getUserWalletByUserId,
 } = require('src/components/users/usersRepository');
 const {createFakeCatNFT} = require('src/utilities/fakeNFTCatsUtil');
 const HttpSuccess = require('src/responses/httpSuccess');
@@ -135,8 +138,108 @@ async function updateAsset(req, res, next) {
 }
 
 
+/**
+ * Controller for request to create user gallery
+ * @param {Object} req - The request object
+ * @param {Object} res - The response object
+ * @param {Function} next - The next function to execute
+ */
+async function createOffer(req, res, next) {
+  const METHOD = '[createOffer]';
+
+  logger.info(`${TAG} ${METHOD}`);
+  try {
+    const {assetId} = req.params;
+    const {offeredAmount} = req.body;
+    const uuid = uuidv4();
+    const user = req.user;
+
+    if (!user) {
+      return next(new UnauthorizedError('Unauthorized'));
+    }
+
+    const wallet = await getUserWalletByUserId(user.id);
+
+
+    if (!wallet) {
+      return next(new BadRequestError('user has no wallet'));
+    }
+
+    const asset = await getUserAsset(user.id, assetId);
+
+    if (!asset) {
+      return next(new BadRequestError('asset not found'));
+    }
+
+    if (asset.currentAmount > wallet.amount) {
+      return next(new BadRequestError('insufficient funds'));
+    }
+
+    await createAssetOffer(
+        uuid,
+        asset.id,
+        user.id,
+        offeredAmount,
+    );
+
+    res.locals.respObj = new HttpSuccess(
+        200,
+        'Successfully sent offer',
+    );
+
+    next();
+  } catch (err) {
+    logger.error(`${TAG} ${METHOD} ${err}`);
+    next(new HttpError('Failed to send offer'));
+  }
+}
+
+/**
+ * Controller for request to fetch asset's offer
+ * @param {Object} req - The request object
+ * @param {Object} res - The response object
+ * @param {Function} next - The next function to execute
+ */
+async function getOffers(req, res, next) {
+  const METHOD = '[getOffers]';
+
+  logger.info(`${TAG} ${METHOD}`);
+  try {
+    const {assetId} = req.params;
+    const user = req.user;
+
+    if (!user) {
+      return next(new UnauthorizedError('Unauthorized'));
+    }
+
+    const asset = await getUserAsset(user.id, assetId);
+
+    if (!asset) {
+      return next(new BadRequestError('asset not found'));
+    }
+
+    const offers = await getAssetOffers(
+        assetId,
+    );
+
+    res.locals.respObj = new HttpSuccess(
+        200,
+        'Successfully retrieved offers',
+        {offers},
+    );
+
+    next();
+  } catch (err) {
+    logger.error(`${TAG} ${METHOD} ${err}`);
+    next(new HttpError('Failed to retrieve offers'));
+  }
+}
+
+
 module.exports = {
   createAsset,
   updateAsset,
+  createOffer,
+  getOffers,
 };
 

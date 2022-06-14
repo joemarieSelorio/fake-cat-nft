@@ -4,7 +4,6 @@ require('dotenv').config();
 const {map} = require('lodash');
 const knex = require('knex')(require('knexfile'));
 
-
 const logger = require('src/utilities/loggerUtil');
 
 const {

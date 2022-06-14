@@ -6,14 +6,12 @@ const userRouters = require('src/routes/userRoutes');
 const walletRouters = require('src/routes/walletRoutes');
 const gelleryRouters = require('src/routes/galleryRoutes');
 const assetsRouters = require('src/routes/assetRoutes');
-const voteRouters = require('src/routes/voteRoutes');
 const authRoutes = require('src/routes/authRoutes');
 
 router.use('/', userRouters);
 router.use('/', walletRouters);
 router.use('/', gelleryRouters);
 router.use('/', assetsRouters);
-router.use('/', voteRouters);
 router.use('/', authRoutes);
 
 module.exports = router;
