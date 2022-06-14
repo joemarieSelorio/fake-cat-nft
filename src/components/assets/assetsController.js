@@ -279,8 +279,6 @@ async function acceptOffer(req, res, next) {
       getUserWalletByUserId(user.id)],
     );
 
-    console.log(offerOwnerWallet.amount, ' ', offer.amountOffered);
-    console.log(assetOwnerWallet.amount, ' ', offer.amountOffered);
     const newOfferOwnerAmount = offerOwnerWallet.amount - offer.amountOffered;
     const newAssetOwnerAmount = assetOwnerWallet.amount + offer.amountOffered;
 
