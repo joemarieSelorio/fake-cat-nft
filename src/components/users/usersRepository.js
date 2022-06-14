@@ -7,7 +7,12 @@ const knex = require('knex')(require('knexfile'));
 
 const logger = require('src/utilities/loggerUtil');
 
-const {USERS_TABLE, WALLETS_TABLE, ASSETS_TABLE} = process.env;
+const {
+  USERS_TABLE,
+  WALLETS_TABLE,
+  ASSETS_TABLE,
+  GALLERIES_TABLE,
+} = process.env;
 const TAG = '[usersRepository]';
 
 /**
@@ -119,12 +124,11 @@ async function getUserAssets(
 
   const assets = await knex
       .where({user_id: userId})
-      .from(ASSETS_TABLE)
-      .first();
+      .from(ASSETS_TABLE);
 
   return map(assets, (asset) => {
     return {
-      id: asset.id,
+      id: asset.uuid,
       name: asset.name,
       initialAmount: asset.initialAmount,
       currentAmount: asset.current_amount,
@@ -134,6 +138,61 @@ async function getUserAssets(
   });
 }
 
+/**
+ * Fetch specific asset of user
+ * @param {string} userId - User's email
+ * @param {string} assetId - User's email
+ */
+async function getUserAsset(
+    userId,
+    assetId,
+) {
+  const METHOD = '[getUserAsset]';
+  logger.info(`${TAG} ${METHOD}`);
+
+  const asset = await knex
+      .where({user_id: userId, uuid: assetId})
+      .from(ASSETS_TABLE)
+      .first();
+
+  return {
+    id: asset.uuid,
+    name: asset.name,
+    auctioned: asset.auctioned,
+    initialAmount: asset.initialAmount,
+    currentAmount: asset.current_amount,
+    createdAt: asset.created_at,
+    lastUpdatedAt: asset.lastUpdated_at,
+  };
+}
+
+/**
+ * Get user's wallet
+ * @param {string} userId - User's email
+ */
+async function getUserGalleryById(
+    userId,
+) {
+  const METHOD = '[getUserGalleryById]';
+  logger.info(`${TAG} ${METHOD}`);
+
+  const gallery = await knex
+      .where({user_id: userId})
+      .from(GALLERIES_TABLE)
+      .first();
+
+  if (gallery) {
+    return {
+      id: gallery.uuid,
+      name: gallery.name,
+      createdAt: gallery.created_at,
+      lastUpdatedAt: gallery.last_updated_at,
+    };
+  }
+
+  return false;
+}
+
 
 module.exports = {
   createNewUser,
@@ -141,4 +200,6 @@ module.exports = {
   getUserByUuid,
   getUserWalletByUserId,
   getUserAssets,
+  getUserAsset,
+  getUserGalleryById,
 };

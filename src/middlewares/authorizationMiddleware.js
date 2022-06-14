@@ -31,6 +31,8 @@ async function authorize(req, res, next) {
         req.headers.authorization.split(' ')[0] === 'Bearer') {
       const accessToken = req.headers.authorization.split(' ')[1];
       const decoded = await jwt.verify(accessToken, API_SECRET);
+
+      console.log(decoded);
       const user = await getUserByUuid(decoded.id);
 
       user ? req.user = user : req.user = undefined;

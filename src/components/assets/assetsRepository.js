@@ -58,7 +58,34 @@ async function getAssetByUuid(
     id: asset.uuid,
     name: asset.name,
     imgUrl: asset.img_url,
+    auctioned: asset.auctioned,
   };
+}
+
+/**
+ * Get fake nft details
+ * @param {string} uuid - Asset's unique identification
+ * @param {string} galleryId - Asset's unique identification
+ * @param {boolean} status - Status if auctioned or not
+
+ */
+async function updateAssetStatus(
+    uuid,
+    galleryId,
+    status,
+) {
+  const METHOD = '[updateAssetStatus]';
+  logger.info(`${TAG} ${METHOD}`);
+
+  return await knex
+      .where({
+        uuid,
+      })
+      .update({
+        auctioned: status,
+        gallery_id: galleryId,
+      })
+      .from(ASSETS_TABLE);
 }
 
 
@@ -67,4 +94,5 @@ async function getAssetByUuid(
 module.exports = {
   createNewAsset,
   getAssetByUuid,
+  updateAssetStatus,
 };

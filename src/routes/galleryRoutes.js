@@ -5,10 +5,14 @@ const express = require('express');
 const {
   createGallery,
 } = require('src/components/galleries/galleriesController');
+const {
+  authorize,
+} = require('src/middlewares/authorizationMiddleware');
 
 const galleryRouters = new express.Router();
 
 galleryRouters.post('/galleries',
+    authorize,
     createGallery,
 );
 

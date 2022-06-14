@@ -4,6 +4,7 @@ const express = require('express');
 
 const {
   createAsset,
+  updateAsset,
 } = require('src/components/assets/assetsController');
 const {
   authorize,
@@ -14,6 +15,11 @@ const assetsRouters = new express.Router();
 assetsRouters.post('/assets',
     authorize,
     createAsset,
+);
+
+assetsRouters.patch('/assets/:assetId/auction',
+    authorize,
+    updateAsset,
 );
 
 
