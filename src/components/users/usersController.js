@@ -1,10 +1,13 @@
 require('app-module-path').addPath(require('app-root-path').toString());
 require('dotenv').config();
+
 const {v4: uuidv4} = require('uuid');
+const bcrypt = require('bcrypt');
 
 const {
   createNewUser,
   getUserByUuid,
+  getUserWalletByUserId,
 } = require('src/components/users/usersRepository');
 const HttpSuccess = require('src/responses/httpSuccess');
 const HttpError = require('src/responses/httpError');
@@ -24,28 +27,25 @@ async function createUser(req, res, next) {
   logger.info(`${TAG} ${METHOD}`);
 
   const {
+    email,
     firstName,
     lastName,
-    username,
-    email,
     password,
   } = req.body;
 
   const uuid = uuidv4();
+  const hashedPassword= await bcrypt.hash(password, 10);
 
   try {
     await createNewUser(
         uuid,
+        email,
         firstName,
         lastName,
-        username,
-        email,
-        password,
+        hashedPassword,
     );
 
     const user = await getUserByUuid(uuid);
-
-    console.log(user);
 
     res.locals.respObj = new HttpSuccess(
         200,
@@ -60,8 +60,39 @@ async function createUser(req, res, next) {
   }
 }
 
+/**
+ * Controller for request to create new user
+ * @param {Object} req - The request object
+ * @param {Object} res - The response object
+ * @param {Function} next - The next function to execute
+ */
+async function getUserWallet(req, res, next) {
+  const METHOD = '[sendEmail]';
+
+  logger.info(`${TAG} ${METHOD}`);
+
+  try {
+    const {
+      id,
+    } = req.params;
+
+    const wallet = await getUserWalletByUserId(id);
+
+    res.locals.respObj = new HttpSuccess(
+        200,
+        'Successfully retrieved user wallet',
+        {wallet},
+    );
+
+    next();
+  } catch (err) {
+    logger.error(`${TAG} ${METHOD} ${err}`);
+    next(new HttpError('Failed to retrieve user wallet'));
+  }
+}
 
 module.exports = {
   createUser,
+  getUserWallet,
 };
 

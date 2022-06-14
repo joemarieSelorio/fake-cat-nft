@@ -42,11 +42,13 @@ async function getGalleryByUuid(
   const METHOD = '[getGalleryByUuid]';
   logger.info(`${TAG} ${METHOD}`);
 
-  const gallery = await knex(GALLERIES_TABLE).where({uuid}).first();
+  const gallery = await knex.where({uuid}).from(GALLERIES_TABLE).first();
 
   return {
     id: gallery.uuid,
     name: gallery.name,
+    createdAt: gallery.created_at,
+    lastUpdatedAt: gallery.last_updated_at,
   };
 }
 

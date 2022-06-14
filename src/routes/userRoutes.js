@@ -4,12 +4,22 @@ const express = require('express');
 
 const {
   createUser,
+  getUserWallet,
 } = require('src/components/users/usersController');
+const {
+  authorize,
+} = require('src/middlewares/authorizationMiddleware');
+
 
 const userRouters = new express.Router();
 
 userRouters.post('/users',
     createUser,
+);
+
+userRouters.get('/users/:id/wallets',
+    authorize,
+    getUserWallet,
 );
 
 

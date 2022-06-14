@@ -6,11 +6,9 @@ const {
   createNewWallet,
   getWalletByUuid,
 } = require('src/components/wallets/walletsRepository');
-const {
-  getUserByEmail,
-} = require('src/components/users/usersRepository');
 const HttpSuccess = require('src/responses/httpSuccess');
 const HttpError = require('src/responses/httpError');
+const UnauthorizedError = require('src/responses/unauthorizedError');
 const logger = require('src/utilities/loggerUtil');
 
 
@@ -23,23 +21,24 @@ const TAG = '[walletsController]';
  * @param {Function} next - The next function to execute
  */
 async function createWallet(req, res, next) {
-  const METHOD = '[sendEmail]';
+  const METHOD = '[createWallet]';
 
   logger.info(`${TAG} ${METHOD}`);
 
-  const {
-    email,
-    amount,
-  } = req.body;
-
-  const uuid = uuidv4();
-
   try {
-    const {id: userId} = await getUserByEmail(email);
+    const {
+      amount,
+    } = req.body;
+    const user = req.user;
+    const uuid = uuidv4();
+
+    if (!req.user) {
+      return next(new UnauthorizedError('Unauthorized'));
+    }
 
     await createNewWallet(
         uuid,
-        userId,
+        user.id,
         amount,
     );
 
@@ -54,7 +53,7 @@ async function createWallet(req, res, next) {
     next();
   } catch (err) {
     logger.error(`${TAG} ${METHOD} ${err}`);
-    next(new HttpError('Failed to create wallet'));
+    return next(new HttpError('Failed to create new wallet'));
   }
 }
 

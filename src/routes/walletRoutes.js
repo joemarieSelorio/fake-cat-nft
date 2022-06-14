@@ -5,10 +5,14 @@ const express = require('express');
 const {
   createWallet,
 } = require('src/components/wallets/walletsController');
+const {
+  authorize,
+} = require('src/middlewares/authorizationMiddleware');
 
 const walletRouters = new express.Router();
 
 walletRouters.post('/wallets',
+    authorize,
     createWallet,
 );
 

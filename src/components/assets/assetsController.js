@@ -6,9 +6,7 @@ const {
   createNewAsset,
   getAssetByUuid,
 } = require('src/components/assets/assetsRepository');
-const {
-  getUserByEmail,
-} = require('src/components/users/usersRepository');
+const {createFakeCatNFT} = require('src/utilities/fakeNFTCatsUtil');
 const HttpSuccess = require('src/responses/httpSuccess');
 const HttpError = require('src/responses/httpError');
 const logger = require('src/utilities/loggerUtil');
@@ -26,29 +24,28 @@ async function createAsset(req, res, next) {
   const METHOD = '[createAsset]';
 
   logger.info(`${TAG} ${METHOD}`);
-  // should call cats api and remove imgUrl since we will upload an img
-  // should remove galleryId since it should not be required when creating asset
-  // should check wallet balance of user first before creating asset
-  const {
-    email,
-    name,
-    imgUrl,
-    amount,
-    galleryId,
-  } = req.body;
-
-  const uuid = uuidv4();
-
   try {
-    const {id: userId} = await getUserByEmail(email);
+    const {
+      name,
+      initialAmount,
+    } = req.body;
+    const {fakeNFT} = req.files;
+    const user = req.user;
+    const uuid = uuidv4();
+
+
+    const imgUrl = await createFakeCatNFT(
+        fakeNFT.data,
+        fakeNFT.name,
+        uuid,
+    );
 
     await createNewAsset(
         uuid,
         name,
         imgUrl,
-        userId,
-        amount,
-        galleryId,
+        user.id,
+        initialAmount,
     );
 
     const asset = await getAssetByUuid(uuid);

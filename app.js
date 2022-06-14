@@ -3,6 +3,7 @@ require('dotenv').config();
 
 const express = require('express');
 const bodyParser = require('body-parser');
+const fileUpload = require('express-fileupload');
 
 const routes = require('src/routes');
 const HttpError = require('src/responses/httpError');
@@ -11,7 +12,11 @@ const logger = require('src/utilities/loggerUtil');
 
 const app = express();
 
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+app.use(fileUpload({
+  limits: {fileSize: 50 * 1024 * 1024},
+}));
 
 // Routes
 app.use('/', routes);

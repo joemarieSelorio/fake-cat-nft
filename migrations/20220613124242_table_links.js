@@ -11,7 +11,7 @@ exports.up = async function(knex, Promise) {
   await knex.schema.alterTable(ASSETS_TABLE, function(t) {
     t.string('user_id', 64).notNullable()
         .references('uuid').inTable(USERS_TABLE).alter();
-    t.string('gallery_id', 64).notNullable()
+    t.string('gallery_id', 64)
         .references('uuid').inTable(GALLERIES_TABLE).alter();
   });
 
@@ -37,4 +37,23 @@ exports.up = async function(knex, Promise) {
 
 
 exports.down = async function(knex, Promise) {
+  await knex.schema.table(ASSETS_TABLE, function(t) {
+    t.dropForeign('user_id');
+    t.dropForeign('gallery_id');
+  });
+
+  await knex.schema.table(GALLERIES_TABLE, function(t) {
+    t.dropForeign('user_id');
+  });
+
+  await knex.schema.table(WALLETS_TABLE, function(t) {
+    t.dropForeign('user_id');
+  });
+
+  await knex.schema.table(VOTES_TABLE, function(t) {
+    t.dropForeign('user_id');
+    t.dropForeign('asset_id');
+  });
+
+  return;
 };

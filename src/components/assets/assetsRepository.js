@@ -24,7 +24,6 @@ async function createNewAsset(
     imgUrl,
     userId,
     amount,
-    galleryId,
 ) {
   const METHOD = '[createNewAsset]';
   logger.info(`${TAG} ${METHOD}`);
@@ -36,8 +35,8 @@ async function createNewAsset(
     name,
     img_url: imgUrl,
     user_id: userId,
-    amount,
-    gallery_id: galleryId,
+    initial_amount: amount,
+    current_amount: amount,
   };
 
   return await knex.insert(newAsset).into(ASSETS_TABLE);

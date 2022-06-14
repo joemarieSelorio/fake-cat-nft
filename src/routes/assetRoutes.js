@@ -5,10 +5,14 @@ const express = require('express');
 const {
   createAsset,
 } = require('src/components/assets/assetsController');
+const {
+  authorize,
+} = require('src/middlewares/authorizationMiddleware');
 
 const assetsRouters = new express.Router();
 
 assetsRouters.post('/assets',
+    authorize,
     createAsset,
 );
 
