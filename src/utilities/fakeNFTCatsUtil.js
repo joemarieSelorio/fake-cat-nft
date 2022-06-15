@@ -21,6 +21,7 @@ const {
 async function createFakeCatNFT(fileData, fileName, id) {
   const METHOD = '[fakeNFTCatsUtil]';
   logger.info(`${TAG} ${METHOD}`);
+
   const form = new FormData();
   form.append('sub_id', id);
   form.append('file', fileData, fileName);

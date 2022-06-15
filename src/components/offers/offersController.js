@@ -15,7 +15,7 @@ const HttpError = require('src/responses/httpError');
 const logger = require('src/utilities/loggerUtil');
 
 
-const TAG = '[assetsRepository]';
+const TAG = '[offersController]';
 
 /**
  * Controller for request to create user gallery

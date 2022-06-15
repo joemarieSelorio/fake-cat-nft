@@ -2,6 +2,7 @@ require('app-module-path').addPath(require('app-root-path').toString());
 require('dotenv').config();
 
 const {v4: uuidv4} = require('uuid');
+const {render} = require('ejs');
 
 const {
   createNewAsset,
@@ -10,7 +11,9 @@ const {
   createAssetOffer,
   getAllAssetOffers,
   getAssetOffer,
+  getAssetOwner,
 } = require('src/components/assets/assetsRepository');
+const {sendEmail} = require('src/services/emailService');
 const {
   getUserAsset,
   getUserGalleryById,
@@ -22,12 +25,18 @@ const {
 const {
   updateOffer,
 } = require('src/components/offers/offersRepository');
+const offerNotif = require('src/components/emails/offerNotif');
 const {createFakeCatNFT} = require('src/utilities/fakeNFTCatsUtil');
 const HttpSuccess = require('src/responses/httpSuccess');
 const UnauthorizedError = require('src/responses/unauthorizedError');
 const BadRequestError = require('src/responses/badRequestError');
 const HttpError = require('src/responses/httpError');
 const logger = require('src/utilities/loggerUtil');
+
+const {
+  SES_KEY,
+  SES_SECRET,
+} = process.env;
 
 
 const TAG = '[assetsController]';
@@ -175,9 +184,14 @@ async function createOffer(req, res, next) {
     }
 
     const asset = await getAssetByUuid(assetId);
+    const owner = await getAssetOwner(asset.ownerId);
 
     if (!asset) {
       return next(new BadRequestError('asset not found'));
+    }
+
+    if (!owner) {
+      return next(new BadRequestError('asset owner not found'));
     }
 
     if (asset.currentAmount > wallet.amount) {
@@ -189,6 +203,21 @@ async function createOffer(req, res, next) {
         asset.id,
         user.id,
         offeredAmount,
+    );
+
+    const subject = offerNotif.subject;
+    const body = render(offerNotif.body, {name: owner.firstName});
+
+    await sendEmail(
+        {
+          SES_KEY,
+          SES_SECRET,
+        },
+        owner.email,
+        {
+          subject,
+          body,
+        },
     );
 
     res.locals.respObj = new HttpSuccess(
