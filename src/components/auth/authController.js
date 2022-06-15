@@ -2,14 +2,14 @@ require('app-module-path').addPath(require('app-root-path').toString());
 require('dotenv').config();
 
 const jwt = require('jsonwebtoken');
-// const bcrypt = require('bcrypt');
-
+const bcrypt = require('bcrypt');
 
 const {
   getUserByEmail,
 } = require('src/components/users/usersRepository');
 const HttpSuccess = require('src/responses/httpSuccess');
 const HttpError = require('src/responses/httpError');
+const UnauthorizedError = require('src/responses/unauthorizedError');
 const logger = require('src/utilities/loggerUtil');
 
 const {API_SECRET} = process.env;
@@ -30,8 +30,21 @@ async function login(req, res, next) {
   try {
     const {
       email,
+      password,
     } = req.body;
     const user = await getUserByEmail(email);
+
+    console.log(user);
+
+    if (!user) {
+      return next(new UnauthorizedError('Invalid username or password'));
+    }
+
+    const hasSamePassword = await bcrypt.compare(password, user.password);
+
+    if (!hasSamePassword) {
+      return next(new UnauthorizedError('Invalid username or password'));
+    }
 
     const token = jwt.sign({
       id: user.id,

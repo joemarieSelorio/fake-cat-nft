@@ -52,7 +52,35 @@ async function getGalleryByUuid(
   };
 }
 
+/**
+ * Get user's wallet
+ * @param {string} userId - User's email
+ */
+async function getGalleryByUserId(
+    userId,
+) {
+  const METHOD = '[getGalleryByUserId]';
+  logger.info(`${TAG} ${METHOD}`);
+
+  const gallery = await knex
+      .where({user_id: userId})
+      .from(GALLERIES_TABLE)
+      .first();
+
+  if (gallery) {
+    return {
+      id: gallery.uuid,
+      name: gallery.name,
+      createdAt: gallery.created_at,
+      lastUpdatedAt: gallery.last_updated_at,
+    };
+  }
+
+  return false;
+}
+
 module.exports = {
   createNewGallery,
   getGalleryByUuid,
+  getGalleryByUserId,
 };

@@ -11,16 +11,18 @@ const {
   createAssetOffer,
   getAllAssetOffers,
   getAssetOffer,
+  getUserAsset,
 } = require('src/components/assets/assetsRepository');
 const {sendEmail} = require('src/services/emailService');
 const {
-  getUserAsset,
   getUserByUuid,
-  getUserGalleryById,
-  getUserWalletByUserId,
 } = require('src/components/users/usersRepository');
 const {
+  getGalleryByUserId,
+} = require('src/components/galleries/galleriesRepository');
+const {
   updateWalletByUserId,
+  getWalletByUserId,
 } = require('src/components/wallets/walletsRepository');
 const {
   updateOffer,
@@ -112,7 +114,7 @@ async function updateAsset(req, res, next) {
       return next(new UnauthorizedError('Unauthorized'));
     }
 
-    const gallery = await getUserGalleryById(user.id);
+    const gallery = await getGalleryByUserId(user.id);
 
 
     if (!gallery) {
@@ -171,7 +173,7 @@ async function createOffer(req, res, next) {
       return next(new UnauthorizedError('Unauthorized'));
     }
 
-    const wallet = await getUserWalletByUserId(user.id);
+    const wallet = await getWalletByUserId(user.id);
 
 
     if (!wallet) {
@@ -298,8 +300,8 @@ async function acceptOffer(req, res, next) {
     const offerer = await getUserByUuid(offer.offerOwner);
 
     const [offerOwnerWallet, assetOwnerWallet] = await Promise.all([
-      getUserWalletByUserId(offer.offerOwner),
-      getUserWalletByUserId(user.id)],
+      getWalletByUserId(offer.offerOwner),
+      getWalletByUserId(user.id)],
     );
 
     const newOfferOwnerAmount = offerOwnerWallet.amount - offer.amountOffered;

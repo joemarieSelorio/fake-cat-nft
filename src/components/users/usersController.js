@@ -7,9 +7,9 @@ const bcrypt = require('bcrypt');
 const {
   createNewUser,
   getUserByUuid,
-  getUserWalletByUserId,
-  getAllUserAssets,
+  getWalletByUserId,
 } = require('src/components/users/usersRepository');
+const {getUserAssets} = require('src/components/assets/assetsRepository');
 const HttpSuccess = require('src/responses/httpSuccess');
 const HttpError = require('src/responses/httpError');
 const BadRequestError = require('src/responses/badRequestError');
@@ -76,7 +76,7 @@ async function getUserWallet(req, res, next) {
   try {
     const {id} = req.params;
 
-    const wallet = await getUserWalletByUserId(id);
+    const wallet = await getWalletByUserId(id);
 
     if (!wallet) {
       return next(new BadRequestError('wallet not found'));
@@ -101,8 +101,8 @@ async function getUserWallet(req, res, next) {
  * @param {Object} res - The response object
  * @param {Function} next - The next function to execute
  */
-async function getUserAssets(req, res, next) {
-  const METHOD = '[getUserAssets]';
+async function getAllUserAssets(req, res, next) {
+  const METHOD = '[getAllUserAssets]';
 
   logger.info(`${TAG} ${METHOD}`);
 
@@ -111,7 +111,7 @@ async function getUserAssets(req, res, next) {
       id,
     } = req.params;
 
-    const assets = await getAllUserAssets(id);
+    const assets = await getUserAssets(id);
 
     res.locals.respObj = new HttpSuccess(
         200,
@@ -129,6 +129,6 @@ async function getUserAssets(req, res, next) {
 module.exports = {
   createUser,
   getUserWallet,
-  getUserAssets,
+  getAllUserAssets,
 };
 

@@ -6,7 +6,7 @@ const expect = chai.expect;
 const sinon = require('sinon');
 const proxyquire = require('proxyquire');
 
-const fixture = require('test/unit/repositories/' +
+const fixture = require('tests/unit/repositories/' +
   'fixtures/galleriesRepositoryConfig');
 
 

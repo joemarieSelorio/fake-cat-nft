@@ -168,6 +168,64 @@ async function getAssetOffer(
   };
 }
 
+/**
+ * Fetch all assets using user id
+ * @param {string} userId - User's email
+ */
+async function getUserAssets(
+    userId,
+) {
+  const METHOD = '[getUserAssets]';
+  logger.info(`${TAG} ${METHOD}`);
+
+  const assets = await knex
+      .where({user_id: userId})
+      .from(ASSETS_TABLE);
+
+  return map(assets, (asset) => {
+    return {
+      id: asset.uuid,
+      name: asset.name,
+      initialAmount: asset.initialAmount,
+      currentAmount: asset.current_amount,
+      createdAt: asset.created_at,
+      lastUpdatedAt: asset.lastUpdated_at,
+    };
+  });
+}
+
+/**
+ * Fetch specific asset using user ID and asset ID
+ * @param {string} userId - User's email
+ * @param {string} assetId - User's email
+ */
+async function getUserAsset(
+    userId,
+    assetId,
+) {
+  const METHOD = '[getUserAsset]';
+  logger.info(`${TAG} ${METHOD}`);
+
+  const asset = await knex
+      .where({user_id: userId, uuid: assetId})
+      .from(ASSETS_TABLE)
+      .first();
+
+  if (asset) {
+    return {
+      id: asset.uuid,
+      name: asset.name,
+      auctioned: asset.auctioned,
+      initialAmount: asset.initialAmount,
+      currentAmount: asset.current_amount,
+      createdAt: asset.created_at,
+      lastUpdatedAt: asset.lastUpdated_at,
+    };
+  }
+
+  return false;
+}
+
 
 module.exports = {
   createNewAsset,
@@ -176,4 +234,6 @@ module.exports = {
   createAssetOffer,
   getAllAssetOffers,
   getAssetOffer,
+  getUserAsset,
+  getUserAssets,
 };

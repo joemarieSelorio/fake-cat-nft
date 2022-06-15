@@ -11,7 +11,7 @@ class BadRequestError extends HttpError {
    * @constructor
    * @param {string} message - Custom error message
    */
-  constructor(message = 'Forbidden Error') {
+  constructor(message = 'Bad Request Error') {
     super(new Date(), 400, 9995, message);
   }
 }

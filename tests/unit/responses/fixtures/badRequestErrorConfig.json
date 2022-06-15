@@ -1,0 +1,57 @@
+{
+    "defaultStatus": 400,
+    "defaultCode": 9995,
+    "defaultMessage": "Bad Request Error",
+    "errorArrRequired": [ 
+      { 
+        "keyword": "required",
+        "schemaPath": "#/required",
+        "params": { 
+          "missingProperty": "topics"
+        },
+        "message": "should have required property 'topics'"
+      }
+    ],
+    "errorArrType": [
+      { 
+        "keyword": "type",
+        "dataPath": ".topics[0]",
+        "schemaPath": "#/properties/topics/items/type",
+        "params": { 
+          "type": "integer" 
+        },
+        "message": "should be integer"
+      },
+      { 
+        "keyword": "type",
+        "schemaPath": "#/properties/topics/items/type",
+        "message": "should be integer"
+      },
+      {
+        "keyword": "enum",
+        "dataPath": ".topics[0]",
+        "schemaPath": "#/properties/topics/items/enum",
+        "params": { 
+          "allowedValues": [] 
+        },
+        "message": "should be equal to one of the allowed values" 
+      }
+    ],
+    "validErrorRequired": [
+      {
+        "errCode": 400,
+        "errMessage": "should have required property 'topics'",
+        "path": "topicsUtil.js",
+        "topics": "should have required property 'topics'"
+      }
+    ],
+    "validErrorType": [
+      {
+        "topics[0]": "should be integer"
+      },
+      {
+        "topics[0]": "should be equal to one of the allowed values"
+      }
+    ]
+  }
+  

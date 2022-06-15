@@ -7,7 +7,7 @@
     "coverage": "nyc _mocha --recursive tests",
     "lint": "eslint --ext .js",
     "lint:fix": "eslint --ext .js --fix",
-    "test": "mocha --recursive test/unit",
+    "test:unit": "mocha --recursive tests/unit",
     "db:latest": "knex migrate:latest",
     "db:rollback": "knex migrate:rollback",
     "start": "node app.js"

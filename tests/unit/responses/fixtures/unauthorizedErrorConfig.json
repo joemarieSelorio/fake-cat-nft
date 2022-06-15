@@ -1,0 +1,5 @@
+{
+  "defaultStatus": 401,
+  "defaultCode": 9996,
+  "defaultMessage": "Unauthorized Error"
+}

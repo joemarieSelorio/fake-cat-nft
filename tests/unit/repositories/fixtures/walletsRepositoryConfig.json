@@ -1,0 +1,6 @@
+{
+  "id": "12345-12345-12345",
+  "userId": "12345-abcdef-67890",
+  "amount": 10000,
+  "createWalletResponse": [0,1,2,3,4,5,6]
+}

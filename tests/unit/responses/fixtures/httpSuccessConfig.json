@@ -1,0 +1,8 @@
+{
+    "defaultStatus": 200,
+    "defaultMessage": "Operation completed successfully",
+    "validAdditionalData": {
+      "key": "value"
+    }
+  }
+  

@@ -2,7 +2,6 @@
   "id": "12345-12345-12345",
   "firstName": "joemarie",
   "lastName": "selorio",
-  "username": "jcselorio",
   "email": "seloriojoemarie@gmail.com",
   "password": "testPassword",
 
@@ -13,7 +12,12 @@
     "last_name": "selorio",
     "username":"jcselorio",
     "email_address":"seloriojoemarie@gmail.com",
+    "password":"GcchZEdUcMJcJK*qPng83rxEZ8*8rKGAD$b^ejRr#uN^UYS8*28jsgs^jRv",
     "created_at": "2022-06-13T15:55:26.046Z",
     "last_updated_at": "2022-06-13T15:55:26.046Z"
-  }
+  },
+  "userDateToBeUpdated": {
+    "first_name": "joms"
+  },
+  "updateUserResponse": "success"
 }

@@ -53,6 +53,31 @@ async function getWalletByUuid(
 }
 
 /**
+ * Get user's wallet
+ * @param {string} userId - User's email
+ */
+async function getWalletByUserId(
+    userId,
+) {
+  const METHOD = '[getWalletByUserId]';
+  logger.info(`${TAG} ${METHOD}`);
+
+  const wallet = await knex
+      .where({user_id: userId})
+      .from(WALLETS_TABLE)
+      .first();
+
+  if (wallet) {
+    return {
+      userId: wallet.user_id,
+      amount: wallet.amount,
+    };
+  }
+
+  return false;
+}
+
+/**
  * Update fake nft details
  * @param {string} userId - Wallet's owner unique identification
  * @param {Object} dataToUpdate - Key value pair of fields to be updated
@@ -80,5 +105,6 @@ module.exports = {
   createNewWallet,
   getWalletByUuid,
   updateWalletByUserId,
+  getWalletByUserId,
 };
 
