@@ -42,5 +42,5 @@ app.use((error, req, res, next)=>{
 });
 
 app.listen(process.env.PORT || 8080, ()=>{
-  logger.info(`Listening to port ${process.env.PORT}`);
+  logger.info(`Listening to port ${process.env.APP_PORT}`);
 });

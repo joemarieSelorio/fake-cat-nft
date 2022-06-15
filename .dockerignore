@@ -1,0 +1,37 @@
+# Install these inside the container
+node_modules
+
+# Don't include docs
+docs
+README.md
+
+# Scripts should be executed outside the container
+scripts
+
+# Tests are executed before building
+tests
+
+# Log files
+log
+logs
+
+# Dev files
+.git
+.gitignore
+.eslintignore
+docker-compose.yaml
+tmp
+
+# Configs
+.env
+sample.env
+test.env
+
+# Gitlab Configs
+.gitlab-ci.yml
+
+# Kubernetes Configs
+kube-*.yaml
+
+# Mac directory
+.DS_Store
