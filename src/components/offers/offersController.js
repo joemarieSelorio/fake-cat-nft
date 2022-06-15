@@ -35,8 +35,6 @@ async function createVote(req, res, next) {
    *  should check first the wallet of user
    *  since it will deduct some amout to vote
    */
-
-
   const {
     voterEmail,
     comments,

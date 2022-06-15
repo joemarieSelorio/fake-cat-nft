@@ -16,5 +16,4 @@ walletRouters.post('/wallets',
     createWallet,
 );
 
-
 module.exports = walletRouters;

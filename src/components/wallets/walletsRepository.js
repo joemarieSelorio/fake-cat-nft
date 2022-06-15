@@ -2,7 +2,7 @@ require('app-module-path').addPath(require('app-root-path').toString());
 require('dotenv').config();
 
 const knex = require('knex')(require('knexfile'));
-const {isString, isNumber, isEmpty, isObject} = require('lodash');
+const {isString, isNumber} = require('lodash');
 
 const logger = require('src/utilities/loggerUtil');
 
