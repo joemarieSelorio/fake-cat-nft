@@ -11,7 +11,7 @@ const {
   getUserAsset,
 } = require('src/components/assets/assetsRepository');
 const {
-  createAssetOffer,
+  createNewOffer,
   getAssetOffer,
   getAllAssetOffers,
 } = require('src/components/offers/offersRepository');
@@ -198,7 +198,7 @@ async function createOffer(req, res, next) {
       return next(new BadRequestError('insufficient funds'));
     }
 
-    await createAssetOffer(
+    await createNewOffer(
         uuid,
         asset.id,
         user.id,

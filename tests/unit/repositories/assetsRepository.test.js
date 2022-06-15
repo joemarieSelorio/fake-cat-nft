@@ -234,7 +234,7 @@ describe('assetsRepository', () => {
           initialAmount: asset.initial_amount,
           currentAmount: asset.current_amount,
           createdAt: asset.created_at,
-          lastUpdatedAt: asset.lastUpdated_at,
+          lastUpdatedAt: asset.last_updated_at,
         };
       });
 
@@ -297,7 +297,7 @@ describe('assetsRepository', () => {
         initialAmount: fixture.getUserAssetResponse.initial_amount,
         currentAmount: fixture.getUserAssetResponse.current_amount,
         createdAt: fixture.getUserAssetResponse.created_at,
-        lastUpdatedAt: fixture.getUserAssetResponse.lastUpdated_at,
+        lastUpdatedAt: fixture.getUserAssetResponse.last_updated_at,
       };
       expect(result).to.deep.equal(response);
     });

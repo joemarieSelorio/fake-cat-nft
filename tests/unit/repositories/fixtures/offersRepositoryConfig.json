@@ -1,0 +1,24 @@
+{
+  "uuid": "12345-67890-123414",
+  "assetId": "abcdef-67890-123414",
+  "offerOwnerId": "982312-123381-19923",
+  "offerAmount": 4000,
+  "createOfferResponse": [0,1,2,3,4,5,6],
+  "getOfferResponse": {
+    "uuid": "12345-67890-123414",
+    "offer_owner": "982312-123381-19923",
+    "amount_offer": 4000,
+    "accepted": false,
+    "created_at": "2022-06-13T15:55:26.046Z",
+    "last_updated_at": "2022-06-13T15:55:26.046Z"
+  },
+  "getOffersResponse": [{
+    "uuid": "12345-67890-123414",
+    "offer_owner": "982312-123381-19923",
+    "amount_offer": 4000,
+    "accepted": false,
+    "created_at": "2022-06-13T15:55:26.046Z",
+    "last_updated_at": "2022-06-13T15:55:26.046Z"
+  }],
+  "updateOfferResponse": "success"
+}

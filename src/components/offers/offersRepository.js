@@ -1,7 +1,7 @@
 require('app-module-path').addPath(require('app-root-path').toString());
 require('dotenv').config();
 
-const {map} = require('lodash');
+const {map, isString, isNumber} = require('lodash');
 const knex = require('knex')(require('knexfile'));
 
 
@@ -17,15 +17,19 @@ const TAG = '[offersRepository]';
  * @param {string} offerOwnerId - Offer owner's uuid
  * @param {number} offeredAmount - Offered amount
  */
-async function createAssetOffer(
+async function createNewOffer(
     uuid,
     assetId,
     offerOwnerId,
     offeredAmount,
 ) {
-  const METHOD = '[createAssetOffer]';
+  const METHOD = '[createNewOffer]';
   logger.info(`${TAG} ${METHOD}`);
 
+  if (!isString(uuid)) throw new Error('invalid uuid');
+  if (!isString(assetId)) throw new Error('invalid asset id');
+  if (!isString(offerOwnerId)) throw new Error('invalid offer owner id');
+  if (!isNumber(offeredAmount)) throw new Error('invalid offer amount');
 
   const newOffer = {
     uuid,
@@ -47,10 +51,17 @@ async function getOfferByUuid(
   const METHOD = '[getOfferByUuid]';
   logger.info(`${TAG} ${METHOD}`);
 
-  const offer = await knex(OFFERS_TABLE).where({uuid}).first();
+  if (!isString(uuid)) throw new Error('invalid uuid');
+
+  const offer = await knex.where({uuid}).from(OFFERS_TABLE).first();
 
   return {
     id: offer.uuid,
+    offerOwner: offer.offer_owner,
+    AmountOffer: offer.amount_offer,
+    accepted: Boolean(offer.accepted),
+    createdAt: offer.created_at,
+    lastUpdatedAt: offer.last_updated_at,
   };
 }
 
@@ -64,6 +75,8 @@ async function getAllAssetOffers(
   const METHOD = '[getAssetOffers]';
   logger.info(`${TAG} ${METHOD}`);
 
+  if (!isString(assetId)) throw new Error('invalid asset id');
+
   const offers = await knex
       .where({asset_id: assetId})
       .from(OFFERS_TABLE);
@@ -72,16 +85,16 @@ async function getAllAssetOffers(
     return {
       id: offer.uuid,
       offerOwner: offer.offer_owner,
-      AmountOffer: offer.amount_offer,
+      amountOffer: offer.amount_offer,
       accepted: Boolean(offer.accepted),
       createdAt: offer.created_at,
-      lastUpdatedAt: offer.lastUpdated_at,
+      lastUpdatedAt: offer.last_updated_at,
     };
   });
 }
 
 /**
- * Fetch all asset's offer
+ * Fetch  asset's specific offer
  * @param {string} assetId - Asset's id
  * @param {string} offerId - Asset's id
  */
@@ -91,6 +104,9 @@ async function getAssetOffer(
 ) {
   const METHOD = '[getAssetOffer]';
   logger.info(`${TAG} ${METHOD}`);
+
+  if (!isString(assetId)) throw new Error('invalid asset id');
+  if (!isString(offerId)) throw new Error('invalid offer id');
 
   const offer = await knex
       .where({
@@ -103,10 +119,10 @@ async function getAssetOffer(
   return {
     id: offer.uuid,
     offerOwner: offer.offer_owner,
-    amountOffered: offer.amount_offer,
+    amountOffer: offer.amount_offer,
     accepted: Boolean(offer.accepted),
     createdAt: offer.created_at,
-    lastUpdatedAt: offer.lastUpdated_at,
+    lastUpdatedAt: offer.last_updated_at,
   };
 }
 
@@ -123,6 +139,8 @@ async function updateOffer(
   const METHOD = '[updateOffer]';
   logger.info(`${TAG} ${METHOD}`);
 
+  if (!isString(uuid)) throw new Error('invalid uuid');
+
   return await knex
       .where({
         uuid,
@@ -133,7 +151,7 @@ async function updateOffer(
 
 
 module.exports = {
-  createAssetOffer,
+  createNewOffer,
   getAssetOffer,
   getAllAssetOffers,
   getOfferByUuid,

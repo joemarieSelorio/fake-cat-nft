@@ -125,7 +125,7 @@ async function getAllUserAssets(
         initialAmount: asset.initial_amount,
         currentAmount: asset.current_amount,
         createdAt: asset.created_at,
-        lastUpdatedAt: asset.lastUpdated_at,
+        lastUpdatedAt: asset.last_updated_at,
       };
     });
   }
@@ -162,7 +162,7 @@ async function getUserAsset(
       initialAmount: asset.initial_amount,
       currentAmount: asset.current_amount,
       createdAt: asset.created_at,
-      lastUpdatedAt: asset.lastUpdated_at,
+      lastUpdatedAt: asset.last_updated_at,
     };
   }
 
