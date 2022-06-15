@@ -61,6 +61,7 @@ async function getUserByUuid(
     id: user.uuid,
     firstName: user.first_name,
     lastName: user.last_name,
+    email: user.email_address,
     createdAt: user.created_at,
     lastUpdatedAt: user.last_updated_at,
   };

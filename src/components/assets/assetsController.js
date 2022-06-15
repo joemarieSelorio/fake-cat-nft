@@ -11,11 +11,11 @@ const {
   createAssetOffer,
   getAllAssetOffers,
   getAssetOffer,
-  getAssetOwner,
 } = require('src/components/assets/assetsRepository');
 const {sendEmail} = require('src/services/emailService');
 const {
   getUserAsset,
+  getUserByUuid,
   getUserGalleryById,
   getUserWalletByUserId,
 } = require('src/components/users/usersRepository');
@@ -184,11 +184,12 @@ async function createOffer(req, res, next) {
     }
 
     const asset = await getAssetByUuid(assetId);
-    const owner = await getAssetOwner(asset.ownerId);
 
     if (!asset) {
       return next(new BadRequestError('asset not found'));
     }
+
+    const owner = await getUserByUuid(asset.ownerId);
 
     if (!owner) {
       return next(new BadRequestError('asset owner not found'));
@@ -208,7 +209,9 @@ async function createOffer(req, res, next) {
     const subject = offerNotif.subject;
     const body = render(offerNotif.body, {name: owner.firstName});
 
-    await sendEmail(
+    console.log(owner);
+
+    const result = await sendEmail(
         {
           SES_KEY,
           SES_SECRET,
@@ -219,6 +222,8 @@ async function createOffer(req, res, next) {
           body,
         },
     );
+
+    console.log(result);
 
     res.locals.respObj = new HttpSuccess(
         200,

@@ -6,7 +6,7 @@ const knex = require('knex')(require('knexfile'));
 
 const logger = require('src/utilities/loggerUtil');
 
-const {ASSETS_TABLE, OFFERS_TABLE, USERS_TABLE} = process.env;
+const {ASSETS_TABLE, OFFERS_TABLE} = process.env;
 const TAG = '[assetsRepository]';
 
 /**
@@ -168,35 +168,6 @@ async function getAssetOffer(
   };
 }
 
-/**
- * Fetch asset's owner using asset Id
- * @param {string} assetId - Asset's id
- * @param {string} offerId - Asset's id
- */
-async function getAssetOwner(assetId) {
-  const METHOD = '[getAssetOwner]';
-  logger.info(`${TAG} ${METHOD}`);
-
-
-  const asset = getAssetByUuid(assetId);
-
-  const owner = await knex
-      .where({
-        uuid: asset.user_id,
-      })
-      .from(USERS_TABLE)
-      .first();
-
-  return {
-    id: owner.uuid,
-    firstName: owner.first_name,
-    lastName: owner.last_name,
-    email: owner.email_address,
-    createdAt: owner.created_at,
-    lastUpdatedAt: owner.lastUpdated_at,
-  };
-}
-
 
 module.exports = {
   createNewAsset,
@@ -205,5 +176,4 @@ module.exports = {
   createAssetOffer,
   getAllAssetOffers,
   getAssetOffer,
-  getAssetOwner,
 };
