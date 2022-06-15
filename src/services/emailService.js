@@ -16,18 +16,13 @@ const TAG = '[emailService]';
 
 /**
  * Send email to recipients
- * @param {object} config - Email config
- * @param {string} config.accessKeyId - Email access key id
- * @param {string} config.secretAccessKey - Email secret access key
  * @param {string[]} recipients - List of email recipients
  * @param {object} content - Email content
  * @param {string} content.subject - Email subject
  * @param {string} content.body - Email body
- * @param {string[]} attachments - List of attachments
  * @return {Promise<boolean>}
  */
 async function sendEmail(
-    config,
     recipients,
     content,
 ) {

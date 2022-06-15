@@ -26,18 +26,13 @@ const {
   updateOffer,
 } = require('src/components/offers/offersRepository');
 const offerNotif = require('src/components/emails/offerNotif');
+const acceptedOfferNotif = require('src/components/emails/acceptedOfferNotif');
 const {createFakeCatNFT} = require('src/utilities/fakeNFTCatsUtil');
 const HttpSuccess = require('src/responses/httpSuccess');
 const UnauthorizedError = require('src/responses/unauthorizedError');
 const BadRequestError = require('src/responses/badRequestError');
 const HttpError = require('src/responses/httpError');
 const logger = require('src/utilities/loggerUtil');
-
-const {
-  SES_KEY,
-  SES_SECRET,
-} = process.env;
-
 
 const TAG = '[assetsController]';
 
@@ -209,21 +204,13 @@ async function createOffer(req, res, next) {
     const subject = offerNotif.subject;
     const body = render(offerNotif.body, {name: owner.firstName});
 
-    console.log(owner);
-
-    const result = await sendEmail(
-        {
-          SES_KEY,
-          SES_SECRET,
-        },
+    await sendEmail(
         owner.email,
         {
           subject,
           body,
         },
     );
-
-    console.log(result);
 
     res.locals.respObj = new HttpSuccess(
         200,
@@ -308,6 +295,8 @@ async function acceptOffer(req, res, next) {
       return next(new BadRequestError('offer not found'));
     }
 
+    const offerer = await getUserByUuid(offer.offerOwner);
+
     const [offerOwnerWallet, assetOwnerWallet] = await Promise.all([
       getUserWalletByUserId(offer.offerOwner),
       getUserWalletByUserId(user.id)],
@@ -337,6 +326,20 @@ async function acceptOffer(req, res, next) {
           auctioned: false,
           gallery_id: null,
           current_amount: offer.amountOffered,
+        },
+    );
+
+    const subject = acceptedOfferNotif.subject;
+    const body = render(acceptedOfferNotif.body, {
+      name: offerer.firstName,
+      asset: asset.name,
+    });
+
+    await sendEmail(
+        user.email,
+        {
+          subject,
+          body,
         },
     );
 
