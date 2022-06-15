@@ -9,7 +9,7 @@ const {
   getUserByUuid,
   getWalletByUserId,
 } = require('src/components/users/usersRepository');
-const {getUserAssets} = require('src/components/assets/assetsRepository');
+const {getAllUserAssets} = require('src/components/assets/assetsRepository');
 const HttpSuccess = require('src/responses/httpSuccess');
 const HttpError = require('src/responses/httpError');
 const BadRequestError = require('src/responses/badRequestError');
@@ -101,8 +101,8 @@ async function getUserWallet(req, res, next) {
  * @param {Object} res - The response object
  * @param {Function} next - The next function to execute
  */
-async function getAllUserAssets(req, res, next) {
-  const METHOD = '[getAllUserAssets]';
+async function getUserAssets(req, res, next) {
+  const METHOD = '[getUserAssets]';
 
   logger.info(`${TAG} ${METHOD}`);
 
@@ -111,7 +111,7 @@ async function getAllUserAssets(req, res, next) {
       id,
     } = req.params;
 
-    const assets = await getUserAssets(id);
+    const assets = await getAllUserAssets(id);
 
     res.locals.respObj = new HttpSuccess(
         200,
@@ -129,6 +129,6 @@ async function getAllUserAssets(req, res, next) {
 module.exports = {
   createUser,
   getUserWallet,
-  getAllUserAssets,
+  getUserAssets,
 };
 

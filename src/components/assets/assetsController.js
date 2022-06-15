@@ -8,11 +8,13 @@ const {
   createNewAsset,
   getAssetByUuid,
   updateAssetStatus,
-  createAssetOffer,
-  getAllAssetOffers,
-  getAssetOffer,
   getUserAsset,
 } = require('src/components/assets/assetsRepository');
+const {
+  createAssetOffer,
+  getAssetOffer,
+  getAllAssetOffers,
+} = require('src/components/offers/offersRepository');
 const {sendEmail} = require('src/services/emailService');
 const {
   getUserByUuid,

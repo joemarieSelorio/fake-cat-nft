@@ -5,7 +5,7 @@ const express = require('express');
 const {
   createUser,
   getUserWallet,
-  getAllUserAssets,
+  getUserAssets,
 } = require('src/components/users/usersController');
 const {
   authorize,
@@ -21,7 +21,7 @@ userRouters.get('/users/:id/wallets',
 
 userRouters.get('/users/:id/assets',
     authorize,
-    getAllUserAssets,
+    getUserAssets,
 );
 
 userRouters.post('/users',

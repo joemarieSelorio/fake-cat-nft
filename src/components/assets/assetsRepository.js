@@ -1,25 +1,24 @@
 require('app-module-path').addPath(require('app-root-path').toString());
 require('dotenv').config();
 
-const {map} = require('lodash');
+const {map, isEmpty, isString, isNumber} = require('lodash');
 const knex = require('knex')(require('knexfile'));
 
 const logger = require('src/utilities/loggerUtil');
 
-const {ASSETS_TABLE, OFFERS_TABLE} = process.env;
+const {ASSETS_TABLE} = process.env;
 const TAG = '[assetsRepository]';
 
 /**
  * Creates fake nft cats for user
- * @param {string} id - asset's uuid
+ * @param {string} uuid - asset's uuid
  * @param {string} name - asset's  name
  * @param {string} imgUrl - asset's  name
  * @param {string} userId - asset's  name
  * @param {number} amount - asset's  amount
- * @param {string} galleryId - asset's  name
  */
 async function createNewAsset(
-    id,
+    uuid,
     name,
     imgUrl,
     userId,
@@ -28,10 +27,14 @@ async function createNewAsset(
   const METHOD = '[createNewAsset]';
   logger.info(`${TAG} ${METHOD}`);
 
-  // Should remove gallery id and update it as nullable in schema
+  if (!isString(uuid)) throw new Error('invalid uuid');
+  if (!isString(name)) throw new Error('invalid name');
+  if (!isString(imgUrl)) throw new Error('invalid image url');
+  if (!isString(userId)) throw new Error('invalid user id');
+  if (!isNumber(amount)) throw new Error('invalid amount');
 
   const newAsset = {
-    uuid: id,
+    uuid,
     name,
     img_url: imgUrl,
     user_id: userId,
@@ -52,15 +55,21 @@ async function getAssetByUuid(
   const METHOD = '[getAssetByUuid]';
   logger.info(`${TAG} ${METHOD}`);
 
-  const asset = await knex(ASSETS_TABLE).where({uuid}).first();
+  if (!isString(uuid)) throw new Error('invalid uuid');
 
-  return {
-    id: asset.uuid,
-    name: asset.name,
-    ownerId: asset.user_id,
-    imgUrl: asset.img_url,
-    auctioned: asset.auctioned,
-  };
+  const asset = await knex.where({uuid}).from(ASSETS_TABLE).first();
+
+  if (asset) {
+    return {
+      id: asset.uuid,
+      name: asset.name,
+      ownerId: asset.user_id,
+      imgUrl: asset.img_url,
+      auctioned: asset.auctioned,
+    };
+  }
+
+  return false;
 }
 
 /**
@@ -76,6 +85,11 @@ async function updateAssetStatus(
   const METHOD = '[updateAssetStatus]';
   logger.info(`${TAG} ${METHOD}`);
 
+  if (!isString(uuid)) throw new Error('invalid uuid');
+  if (Object.keys(dataToUpdate).length === 0) {
+    throw new Error('invalid properties');
+  }
+
   return await knex
       .where({
         uuid,
@@ -86,112 +100,37 @@ async function updateAssetStatus(
 
 
 /**
- * Creates offer for the auctioned fake NFT
- * @param {string} uuid - Offer's unique identification
- * @param {string} assetId - Asset's  uuid
- * @param {string} offerOwnerId - Offer owner's uuid
- * @param {number} offeredAmount - Offered amount
- */
-async function createAssetOffer(
-    uuid,
-    assetId,
-    offerOwnerId,
-    offeredAmount,
-) {
-  const METHOD = '[createAssetOffer]';
-  logger.info(`${TAG} ${METHOD}`);
-
-
-  const newOffer = {
-    uuid,
-    asset_id: assetId,
-    offer_owner: offerOwnerId,
-    amount_offer: offeredAmount,
-  };
-
-  return await knex.insert(newOffer).into(OFFERS_TABLE);
-}
-
-/**
- * Fetch all asset's offer
- * @param {string} assetId - Asset's id
- */
-async function getAllAssetOffers(
-    assetId,
-) {
-  const METHOD = '[getAssetOffers]';
-  logger.info(`${TAG} ${METHOD}`);
-
-  const offers = await knex
-      .where({asset_id: assetId})
-      .from(OFFERS_TABLE);
-
-  return map(offers, (offer) => {
-    return {
-      id: offer.uuid,
-      offerOwner: offer.offer_owner,
-      AmountOffer: offer.amount_offer,
-      accepted: Boolean(offer.accepted),
-      createdAt: offer.created_at,
-      lastUpdatedAt: offer.lastUpdated_at,
-    };
-  });
-}
-
-/**
- * Fetch all asset's offer
- * @param {string} assetId - Asset's id
- * @param {string} offerId - Asset's id
- */
-async function getAssetOffer(
-    assetId,
-    offerId,
-) {
-  const METHOD = '[getAssetOffer]';
-  logger.info(`${TAG} ${METHOD}`);
-
-  const offer = await knex
-      .where({
-        uuid: offerId,
-        asset_id: assetId,
-      })
-      .from(OFFERS_TABLE)
-      .first();
-
-  return {
-    id: offer.uuid,
-    offerOwner: offer.offer_owner,
-    amountOffered: offer.amount_offer,
-    accepted: Boolean(offer.accepted),
-    createdAt: offer.created_at,
-    lastUpdatedAt: offer.lastUpdated_at,
-  };
-}
-
-/**
  * Fetch all assets using user id
  * @param {string} userId - User's email
  */
-async function getUserAssets(
+async function getAllUserAssets(
     userId,
 ) {
-  const METHOD = '[getUserAssets]';
+  const METHOD = '[getAllUserAssets]';
   logger.info(`${TAG} ${METHOD}`);
+
+  if (!isString(userId)) throw new Error('invalid user id');
 
   const assets = await knex
       .where({user_id: userId})
       .from(ASSETS_TABLE);
 
-  return map(assets, (asset) => {
-    return {
-      id: asset.uuid,
-      name: asset.name,
-      initialAmount: asset.initialAmount,
-      currentAmount: asset.current_amount,
-      createdAt: asset.created_at,
-      lastUpdatedAt: asset.lastUpdated_at,
-    };
-  });
+  if (!isEmpty(assets)) {
+    return map(assets, (asset) => {
+      return {
+        id: asset.uuid,
+        name: asset.name,
+        imgUrl: asset.img_url,
+        auctioned: asset.auctioned,
+        initialAmount: asset.initial_amount,
+        currentAmount: asset.current_amount,
+        createdAt: asset.created_at,
+        lastUpdatedAt: asset.lastUpdated_at,
+      };
+    });
+  }
+
+  return false;
 }
 
 /**
@@ -206,6 +145,9 @@ async function getUserAsset(
   const METHOD = '[getUserAsset]';
   logger.info(`${TAG} ${METHOD}`);
 
+  if (!isString(userId)) throw new Error('invalid user id');
+  if (!isString(assetId)) throw new Error('invalid asset id');
+
   const asset = await knex
       .where({user_id: userId, uuid: assetId})
       .from(ASSETS_TABLE)
@@ -215,8 +157,9 @@ async function getUserAsset(
     return {
       id: asset.uuid,
       name: asset.name,
+      imgUrl: asset.img_url,
       auctioned: asset.auctioned,
-      initialAmount: asset.initialAmount,
+      initialAmount: asset.initial_amount,
       currentAmount: asset.current_amount,
       createdAt: asset.created_at,
       lastUpdatedAt: asset.lastUpdated_at,
@@ -231,9 +174,6 @@ module.exports = {
   createNewAsset,
   getAssetByUuid,
   updateAssetStatus,
-  createAssetOffer,
-  getAllAssetOffers,
-  getAssetOffer,
   getUserAsset,
-  getUserAssets,
+  getAllUserAssets,
 };
