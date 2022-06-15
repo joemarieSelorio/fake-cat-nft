@@ -2,6 +2,8 @@ require('app-module-path').addPath(require('app-root-path').toString());
 require('dotenv').config();
 
 const nodemailer = require('nodemailer');
+const {isString} = require('lodash');
+
 const logger = require('src/utilities/loggerUtil');
 const {
   EMAIL_SENDER,
@@ -16,19 +18,22 @@ const TAG = '[emailService]';
 
 /**
  * Send email to recipients
- * @param {string[]} recipients - List of email recipients
- * @param {object} content - Email content
- * @param {string} content.subject - Email subject
- * @param {string} content.body - Email body
+ * @param {string} recipients - List of email recipients
+ * @param {string} subject - Email subject
+ * @param {string} body - Email body
  * @return {Promise<boolean>}
  */
-async function sendEmail(
+async function sendNotification(
     recipients,
-    content,
+    subject,
+    body,
 ) {
-  const METHOD = '[sendEmail]';
-
+  const METHOD = '[sendNotification]';
   logger.info(`${TAG} ${METHOD}`);
+
+  if (!isString(recipients)) throw new Error('invalid recipients');
+  if (!isString(subject)) throw new Error('invalid subject');
+  if (!isString(body)) throw new Error('invalid body');
 
   try {
     const transporter = nodemailer.createTransport({
@@ -43,29 +48,20 @@ async function sendEmail(
       },
     });
 
-    const {
-      subject,
-      body,
-    } = content;
-
-
-    const result = await transporter.sendMail({
+    await transporter.sendMail({
       from: EMAIL_SENDER,
       to: recipients,
       subject,
       html: body,
     });
-    console.log(result);
-    return true;
-  } catch ({message}) {
-    logger.error(`${TAG} ${METHOD} - ${message}`);
+  } catch (error) {
+    logger.error(`${TAG} ${METHOD} ${error}`);
+    throw new Error('Failed to send notification');
   }
-
-  return false;
 }
 
 module.exports = {
-  sendEmail,
+  sendNotification,
 };
 
 

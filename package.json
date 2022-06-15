@@ -9,7 +9,9 @@
     "lint:fix": "eslint --ext .js --fix",
     "test:unit": "mocha --recursive tests/unit",
     "db:latest": "knex migrate:latest",
+    "db:seeds": "knex seed:run",
     "db:rollback": "knex migrate:rollback",
+    "db:reset": "npm run db:rollback && npm run db:latest && npm run start",
     "start": "node app.js"
   },
   "repository": {

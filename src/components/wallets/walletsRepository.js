@@ -80,7 +80,6 @@ async function getWalletByUserId(
       .from(WALLETS_TABLE)
       .first();
 
-  console.log(wallet);
   if (wallet) {
     return {
       uuid: wallet.uuid,

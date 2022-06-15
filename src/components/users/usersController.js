@@ -7,11 +7,12 @@ const bcrypt = require('bcrypt');
 const {
   createNewUser,
   getUserByUuid,
-  getWalletByUserId,
 } = require('src/components/users/usersRepository');
+const {getWalletByUserId} = require('src/components/wallets/walletsRepository');
 const {getAllUserAssets} = require('src/components/assets/assetsRepository');
 const HttpSuccess = require('src/responses/httpSuccess');
 const HttpError = require('src/responses/httpError');
+const UnauthorizedError = require('src/responses/unauthorizedError');
 const BadRequestError = require('src/responses/badRequestError');
 const logger = require('src/utilities/loggerUtil');
 
@@ -24,7 +25,7 @@ const TAG = '[usersController]';
  * @param {Function} next - The next function to execute
  */
 async function createUser(req, res, next) {
-  const METHOD = '[sendEmail]';
+  const METHOD = '[createUser]';
 
   logger.info(`${TAG} ${METHOD}`);
 
@@ -69,12 +70,18 @@ async function createUser(req, res, next) {
  * @param {Function} next - The next function to execute
  */
 async function getUserWallet(req, res, next) {
-  const METHOD = '[sendEmail]';
+  const METHOD = '[getUserWallet]';
 
   logger.info(`${TAG} ${METHOD}`);
 
   try {
     const {id} = req.params;
+
+    const user = req.user;
+
+    if (!user) {
+      return next(new UnauthorizedError('Unauthorized'));
+    }
 
     const wallet = await getWalletByUserId(id);
 
@@ -110,6 +117,12 @@ async function getUserAssets(req, res, next) {
     const {
       id,
     } = req.params;
+
+    const user = req.user;
+
+    if (!user) {
+      return next(new UnauthorizedError('Unauthorized'));
+    }
 
     const assets = await getAllUserAssets(id);
 

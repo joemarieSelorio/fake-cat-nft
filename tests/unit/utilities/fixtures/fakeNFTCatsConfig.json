@@ -1,0 +1,17 @@
+{
+  "fileData": "<Buffer 31 2c 31 2c 31 2c 31 2c 31 2c 31>",
+  "fileName": "My Awesome NFT Cat",
+  "id": "123456",
+  "formData": "--------------------------515890814546601021194782",
+  "createfakeNFTCatsResponse": {
+    "status": 201,
+    "data": {
+      "status": "succes",
+      "url": "https://freepics.io/myawesomenftcats.jpeg"
+    }
+  },
+  "createfakeNFTErrorResponse": {
+    "status": 500,
+    "message": "failed to create fake NFT cats"
+  }
+}

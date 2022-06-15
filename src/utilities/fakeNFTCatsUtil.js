@@ -36,7 +36,6 @@ async function createFakeCatNFT(fileData, fileName, id) {
     url: `${CAT_URL}/v1/images/upload`,
   };
 
-
   const response = await axios(options);
 
   if (response.status !== 201) {

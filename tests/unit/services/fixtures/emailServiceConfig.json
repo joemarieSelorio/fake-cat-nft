@@ -1,0 +1,18 @@
+{
+"recipients": "seloriojoemarie@gmail.com",
+"subject": "sample subject",
+"body": "sample body",
+ "sendEmailResponse": {
+    "accepted": [ "seloriojoemarie@gmail.com" ],
+    "rejected": [],
+    "envelopeTime": 616,
+    "messageTime": 625,
+    "messageSize": 1552,
+    "response": "250 2.0.0 OK  1655299640 iw6-20020a170903044600b0015e8d4eb213sm9296030plb.93 - gsmtp",
+    "envelope": {
+      "from": "reconsettlementstaging@gmail.com",
+      "to": [ "seloriojoemarie@gmail.com" ]
+    },
+    "messageId": "<40ac94b5-a9af-f43a-1d3c-fef636988be8@gmail.com>"
+ }
+}

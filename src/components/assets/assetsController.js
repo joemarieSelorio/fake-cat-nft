@@ -15,7 +15,7 @@ const {
   getAssetOffer,
   getAllAssetOffers,
 } = require('src/components/offers/offersRepository');
-const {sendEmail} = require('src/services/emailService');
+const {sendNotification} = require('src/services/emailService');
 const {
   getUserByUuid,
 } = require('src/components/users/usersRepository');
@@ -75,7 +75,7 @@ async function createAsset(req, res, next) {
         name,
         imgUrl,
         user.id,
-        initialAmount,
+        Number(initialAmount),
     );
 
     const asset = await getAssetByUuid(uuid);
@@ -202,18 +202,16 @@ async function createOffer(req, res, next) {
         uuid,
         asset.id,
         user.id,
-        offeredAmount,
+        Number(offeredAmount),
     );
 
     const subject = offerNotif.subject;
     const body = render(offerNotif.body, {name: owner.firstName});
 
-    await sendEmail(
+    await sendNotification(
         owner.email,
-        {
-          subject,
-          body,
-        },
+        subject,
+        body,
     );
 
     res.locals.respObj = new HttpSuccess(
@@ -306,8 +304,15 @@ async function acceptOffer(req, res, next) {
       getWalletByUserId(user.id)],
     );
 
-    const newOfferOwnerAmount = offerOwnerWallet.amount - offer.amountOffered;
-    const newAssetOwnerAmount = assetOwnerWallet.amount + offer.amountOffered;
+    console.log(offer, ' offer');
+    console.log(offerOwnerWallet, ' offerOwnerWallet');
+    console.log(assetOwnerWallet, ' assetOwnerWallet');
+
+    const newOfferOwnerAmount = offerOwnerWallet.amount - offer.amountOffer;
+    const newAssetOwnerAmount = assetOwnerWallet.amount + offer.amountOffer;
+
+    console.log(newOfferOwnerAmount, ' offerOwnerWallet');
+    console.log(newAssetOwnerAmount, ' assetOwnerWallet');
 
 
     await updateWalletByUserId(offer.offerOwner, {
@@ -339,12 +344,10 @@ async function acceptOffer(req, res, next) {
       asset: asset.name,
     });
 
-    await sendEmail(
-        user.email,
-        {
-          subject,
-          body,
-        },
+    await sendNotification(
+        offerer.email,
+        subject,
+        body,
     );
 
     res.locals.respObj = new HttpSuccess(

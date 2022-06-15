@@ -6,7 +6,6 @@ const chaiAsPromised = require('chai-as-promised');
 const expect = chai.expect;
 const sinon = require('sinon');
 const proxyquire = require('proxyquire');
-const { first } = require('lodash');
 
 const fixture = require('tests/unit/repositories/' +
   'fixtures/offersRepositoryConfig');
