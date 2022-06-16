@@ -13,7 +13,6 @@ const {
   REFRESH_TOKEN,
 } = process.env;
 
-
 const TAG = '[emailService]';
 
 /**
