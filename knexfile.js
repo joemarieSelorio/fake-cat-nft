@@ -1,6 +1,7 @@
 require('dotenv').config();
 const {MYSQL_HOST, MYSQL_PORT,
   MYSQL_USER, MYSQL_PASSWORD, MYSQL_DB, MYSQL_MAX_POOL} = process.env;
+
 module.exports = {
   client: 'mysql',
   connection: {
