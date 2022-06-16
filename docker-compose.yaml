@@ -1,20 +1,22 @@
 version: '3'
 services:
-  fake-cat-nft-mysql:
-    container_name: fake-cat-nft-mysql
+  mysql:
+    container_name: mysql
     image: mysql:8
     command: --default-authentication-plugin=mysql_native_password
     environment:
       MYSQL_ROOT_PASSWORD: 'r00tp@ssw0rd123'
-      MYSQL_DATABASE: fake_nft_cats
-      MYSQL_USER: fake_nft_user
+      MYSQL_DATABASE: joms
+      MYSQL_USER: joms
       MYSQL_PASSWORD: '3ntityp@ssw0rd123'
+    ports:
+      - 3307:3306
     volumes:
-      - fake_nft_cats-mysql-db:/var/lib/mysql
+      - mysql-db:/var/lib/mysql
     networks:
-      - fake_nft_cats-mysql-network
-  fake-cat-nfts:
-    container_name: fake-cat-nft
+      - fake-nft-cats-network
+  fake-nft-cats:
+    container_name: fake-nft-cats
     build:
       context: .
       dockerfile: ./Dockerfile
@@ -23,12 +25,12 @@ services:
     env_file:
       - .env
     depends_on:
-      - fake-cat-nft-mysql
+      - mysql
     networks:
-      - fake_nft_cats-mysql-network
+      - fake-nft-cats-network
 
 volumes:
-  fake_nft_cats-mysql-db:
+  mysql-db:
 
 networks:
-  fake_nft_cats-mysql-network:
+  fake-nft-cats-network:
