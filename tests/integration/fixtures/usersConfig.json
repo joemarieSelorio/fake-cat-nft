@@ -1,0 +1,21 @@
+{
+  "id": "12345-12345-12345",
+  "firstName": "joemarie",
+  "lastName": "selorio",
+  "email": "seloriojoemarie@gmail.com",
+  "password": "testPassword",
+  "defaultUser": {
+    "uuid": "b1559a3e-2837-4b7d-b4f1-73207ecbc67d",
+    "email_address": "seloriojoemariev2@gmail.com",
+    "first_name": "joemarie",
+    "last_name": "selorio",
+    "password": "@Password12345"
+  },
+  "userRequestBody": {
+    "email": "seloriojoemarie@gmail.com",
+    "firstName": "joemarie",
+    "lastName": "selorio",
+    "password": "@Password12345"
+  },
+  "successMessage": "Successfully create user"
+}

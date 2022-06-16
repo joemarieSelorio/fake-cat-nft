@@ -77,7 +77,7 @@ async function getUserByUuid(
 async function getUserByEmail(
     email,
 ) {
-  const METHOD = '[getUserByUuid]';
+  const METHOD = '[getUserByEmail]';
   logger.info(`${TAG} ${METHOD}`);
 
   if (!isString(email)) throw new Error('invalid email');

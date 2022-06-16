@@ -110,8 +110,6 @@ async function updateAsset(req, res, next) {
     const {status} = req.body;
     const user = req.user;
 
-    console.log(user);
-
     if (!user) {
       return next(new UnauthorizedError('Unauthorized'));
     }
@@ -304,16 +302,8 @@ async function acceptOffer(req, res, next) {
       getWalletByUserId(user.id)],
     );
 
-    console.log(offer, ' offer');
-    console.log(offerOwnerWallet, ' offerOwnerWallet');
-    console.log(assetOwnerWallet, ' assetOwnerWallet');
-
     const newOfferOwnerAmount = offerOwnerWallet.amount - offer.amountOffer;
     const newAssetOwnerAmount = assetOwnerWallet.amount + offer.amountOffer;
-
-    console.log(newOfferOwnerAmount, ' offerOwnerWallet');
-    console.log(newAssetOwnerAmount, ' assetOwnerWallet');
-
 
     await updateWalletByUserId(offer.offerOwner, {
       amount: newOfferOwnerAmount,

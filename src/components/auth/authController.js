@@ -34,8 +34,6 @@ async function login(req, res, next) {
     } = req.body;
     const user = await getUserByEmail(email);
 
-    console.log(user);
-
     if (!user) {
       return next(new UnauthorizedError('Invalid username or password'));
     }
