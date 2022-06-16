@@ -16,5 +16,4 @@ galleryRouters.post('/galleries',
     createGallery,
 );
 
-
 module.exports = galleryRouters;
