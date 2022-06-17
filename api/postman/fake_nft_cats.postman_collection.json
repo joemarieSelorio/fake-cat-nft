@@ -1,0 +1,348 @@
+{
+	"info": {
+		"_postman_id": "ae93ee12-fac8-4367-ac55-b871057eeb92",
+		"name": "FAKE NFT CATS",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "localhost:8080/login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\":\"seloriojoemarie@gmail.com\",\r\n    \"password\": \"@Password12345\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/login",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8080/wallets",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFiZmQ0MWQ4LWRhYmEtNGYwMy05NDBlLWU1N2U3Yjk1YjlmNSIsImlhdCI6MTY1NTE2Nzc2OSwiZXhwIjoxNjU1MjU0MTY5fQ.YgDdFBybvKr-xXSullaL1kc0zJ5uFspG6jHMY-VxVXI",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"amount\": 10000\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/wallets",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"wallets"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8080/galleries",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVjNDhjMjY1LWFlN2YtNDY2Ni04ZmFjLWQ2OThjZjFkOTA3ZCIsImlhdCI6MTY1NTE4MjU2MywiZXhwIjoxNjU1MjY4OTYzfQ.Unne0WHlrGm19UlrqmfrR5uWYu5nTZc9wjawu9dKhj4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"my gallery\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/galleries",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"galleries"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8080/users/{user_id}/wallets",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijc4YzY0NGQ5LTQ2M2MtNDc0MS1iZTBjLWU0YmQwZmJiYzZiOSIsImlhdCI6MTY1NTI5ODI4NywiZXhwIjoxNjU1Mzg0Njg3fQ.kqXMkYcMkxGx7Nchxilp1Bfi7J5a82iuSW0Sjyj-lOc",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:8080/users/78c644d9-463c-4741-be0c-e4bd0fbbc6b9/wallets",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"78c644d9-463c-4741-be0c-e4bd0fbbc6b9",
+						"wallets"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8080/assets/{asset_id}/auction",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRkODUyZTEyLTA3ZmQtNDMxZC04YWE1LTQ5Mjg3YTM3MzdlMyIsImlhdCI6MTY1NTE4ODkzNiwiZXhwIjoxNjU1Mjc1MzM2fQ.5VMtgM3Wqb53RNxrhhDzJn4dSxFNbEsNBt4W0BuLd_E",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"status\": true\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/assets/fd6fc07b-6297-49e0-b9a5-73d3ceba70da/auction",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"assets",
+						"fd6fc07b-6297-49e0-b9a5-73d3ceba70da",
+						"auction"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8080/assets",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijk1MWY3MjNiLTNmNjQtNGRhZi1hZTFhLWE5MGY2OTc2YjdjNSIsImlhdCI6MTY1NTE4MDM3MSwiZXhwIjoxNjU1MjY2NzcxfQ.bRWQjg29kBYvpLqKf3tqBoQgczrJ3JOKQLdt6EdR35c",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "fakeNFT",
+							"type": "file",
+							"src": "/C:/Users/joms/Desktop/Cool Cats/cool_cat_1.jpg"
+						},
+						{
+							"key": "name",
+							"value": "My fake nft",
+							"type": "text"
+						},
+						{
+							"key": "initialAmount",
+							"value": "10000",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8080/assets",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"assets"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8080/users",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"seloriojoemarie@gmail.com\",\r\n    \"firstName\": \"joemarie\",\r\n    \"lastName\": \"selorio\",\r\n    \"password\": \"@Password12345\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/users",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8080/assets/{asset_id}/offer",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijc3NTlhODliLWIwNGItNDAwNS04N2U1LTc3ZmVjZjNlNDcyNCIsImlhdCI6MTY1NTI5OTA5OSwiZXhwIjoxNjU1Mzg1NDk5fQ.pdGXx_vbZlNgwN6pLPptnje1_o5kmqFcFOd6GrSInFo",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"offeredAmount\": 1000\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/assets/9b25b13e-b085-41fd-9d75-b7e880f1aa0b/offers",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"assets",
+						"9b25b13e-b085-41fd-9d75-b7e880f1aa0b",
+						"offers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8080/assets/{asset_id}/offers",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVjNDhjMjY1LWFlN2YtNDY2Ni04ZmFjLWQ2OThjZjFkOTA3ZCIsImlhdCI6MTY1NTE4MzkxNCwiZXhwIjoxNjU1MjcwMzE0fQ.vahcH_BsA8Rf-BJqShx_ptudF5oCnMCFJdUlTLBjAEI",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:8080/assets/b787fdb2-a9f2-4aa4-ac14-2f5184d71b99/offers",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"assets",
+						"b787fdb2-a9f2-4aa4-ac14-2f5184d71b99",
+						"offers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8080/users/{user_id}/assets",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjhkYmE1MTlhLWE0ZTctNDhmZS1iZDlmLWE4NmM0ZjlmZTlkNyIsImlhdCI6MTY1NTI5ODg2NSwiZXhwIjoxNjU1Mzg1MjY1fQ.09tC3CgsJ-lUNnURx6tBFGpoKgh5HXkJcHB14iLXByg",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:8080/users/8dba519a-a4e7-48fe-bd9f-a86c4f9fe9d7/assets",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"8dba519a-a4e7-48fe-bd9f-a86c4f9fe9d7",
+						"assets"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8080/assets/{asset_id}/offers/{offer_id}",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1ZWQ0ZmU3LTM0NjUtNDI0OC1iZTYzLTEwMDAxNWNmY2U3NiIsImlhdCI6MTY1NTI5OTMyNSwiZXhwIjoxNjU1Mzg1NzI1fQ.KOOkrHzfoz-AZO7ZWRY92-tCA68FBZlt9fi51Z2xygg",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:8080/assets/b787fdb2-a9f2-4aa4-ac14-2f5184d71b99/offers/",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"assets",
+						"b787fdb2-a9f2-4aa4-ac14-2f5184d71b99",
+						"offers",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

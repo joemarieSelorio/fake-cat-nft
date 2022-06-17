@@ -12,7 +12,7 @@
     "db:latest": "knex migrate:latest",
     "db:seeds": "knex seed:run",
     "db:rollback": "knex migrate:rollback",
-    "db:reset": "npm run db:rollback && npm run db:latest && npm run start",
+    "db:reset": "npm run db:rollback && npm run db:latest",
     "start": "node app.js"
   },
   "repository": {
