@@ -8,7 +8,6 @@ exports.up = function(knex, Promise) {
     t.string('user_id', 64).notNullable();
     t.datetime('created_at', 6).defaultTo(knex.fn.now(6));
     t.datetime('last_updated_at', 6).defaultTo(knex.fn.now(6));
-    t.unique(['name']);
   });
 };
 exports.down = function(knex, Promise) {
