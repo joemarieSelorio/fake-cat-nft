@@ -32,6 +32,7 @@ async function login(req, res, next) {
       email,
       password,
     } = req.body;
+
     const user = await getUserByEmail(email);
 
     if (!user) {

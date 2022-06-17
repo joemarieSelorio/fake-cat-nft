@@ -1,8 +1,9 @@
 {
-  "email": "seloriojoemariev2@gmail.com",
+  "id": "1234567-97123123-123125654",
+  "email": "seloriojoemarie@gmail.com",
   "firstName": "joemarie",
   "lastName": "selorio",
   "password": "testPassword",
-  "name": "My Gallery",
+  "name": "My Gallery The best hoooray",
   "successMessage": "Successfully created gallery"
 }

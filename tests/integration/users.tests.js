@@ -18,42 +18,44 @@ const {
   ASSETS_TABLE,
 } = process.env;
 
-describe('users', () => {
-  before(async ()=> {
-    await knex.raw(`SET foreign_key_checks = 0;`);
+describe('/users', () => {
+  before(async () => {
+    await knex.raw('SET FOREIGN_KEY_CHECKS = 0');
   });
-
   describe('/post/users', () => {
     after(async () => {
-      await knex.raw(`TRUNCATE TABLE ${USERS_TABLE};`);
+      await knex.raw(`TRUNCATE table ${USERS_TABLE}`);
     });
     it('should create new user if'+
-    ' provided with valid arguments', (done) => {
+    ' provided with valid arguments', () => {
       chai
           .request(app)
           .post('/users')
-          .send(fixture.userRequestBody)
+          .send({
+            email: fixture.email1,
+            firstName: fixture.firstName,
+            lastName: fixture.lastName,
+            password: fixture.password,
+          })
           .end((err, res) => {
             expect(res.status).to.be.equal(200);
             expect(res.body.message).to.be.equal(fixture.successMessage);
           });
-      done();
     });
   });
 
   describe('/users/:id/wallets', () => {
     let loginResponse;
-    let uuid;
+    const uuid = uuidv4();
     after(async () => {
-      await knex.raw(`TRUNCATE TABLE ${USERS_TABLE};`);
-      await knex.raw(`TRUNCATE TABLE ${WALLETS_TABLE};`);
+      await knex.raw(`TRUNCATE table ${WALLETS_TABLE}`);
+      await knex.raw(`TRUNCATE table ${USERS_TABLE}`);
     });
     before(async ()=> {
       const hashedPassword= await bcrypt.hash(fixture.password, 10);
-      uuid = uuidv4();
       await knex.insert({
-        uuid: uuid,
-        email_address: fixture.email1,
+        uuid: fixture.id,
+        email_address: fixture.email2,
         first_name: fixture.firstName,
         last_name: fixture.lastName,
         password: hashedPassword,
@@ -61,7 +63,7 @@ describe('users', () => {
 
       await knex.insert({
         uuid: uuid,
-        user_id: uuid,
+        user_id: fixture.id,
         amount: fixture.amount,
       }).into(WALLETS_TABLE);
 
@@ -69,7 +71,7 @@ describe('users', () => {
           .request(app)
           .post(`/login`)
           .send({
-            email: fixture.email1,
+            email: fixture.email2,
             password: fixture.password,
           });
     });
@@ -77,25 +79,24 @@ describe('users', () => {
       const token = loginResponse.body.token;
       const response = await chai
           .request(app)
-          .get(`/users/${uuid}/wallets`)
+          .get(`/users/${fixture.id}/wallets`)
           .set('Authorization', 'Bearer ' + token);
       expect(response.body.status).to.be.equal(200);
     });
   });
 
   describe('/users/:id/assets', () => {
+    const uuid = uuidv4();
     let loginResponse;
-    let uuid;
     after(async () => {
-      await knex.raw(`TRUNCATE TABLE ${USERS_TABLE};`);
-      await knex.raw(`TRUNCATE TABLE ${ASSETS_TABLE};`);
+      await knex.raw(`TRUNCATE table ${ASSETS_TABLE}`);
+      await knex.raw(`TRUNCATE table ${USERS_TABLE}`);
     });
     before(async ()=> {
-      uuid = uuidv4();
       const hashedPassword= await bcrypt.hash(fixture.password, 10);
       await knex.insert({
-        uuid,
-        email_address: fixture.email2,
+        uuid: uuid,
+        email_address: fixture.email3,
         first_name: fixture.firstName,
         last_name: fixture.lastName,
         password: hashedPassword,
@@ -114,7 +115,7 @@ describe('users', () => {
           .request(app)
           .post(`/login`)
           .send({
-            email: fixture.email2,
+            email: fixture.email3,
             password: fixture.password,
           });
     });

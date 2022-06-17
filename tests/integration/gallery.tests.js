@@ -17,21 +17,23 @@ const {
   USERS_TABLE,
 } = process.env;
 
-describe('galleries', () => {
-  before(async ()=> {
-    await knex.raw(`SET foreign_key_checks = 0;`);
+describe('/galleries', () => {
+  before(async () => {
+    await knex.raw('SET FOREIGN_KEY_CHECKS = 0');
   });
 
-  describe('/post/users', () => {
-    let uuid;
+  describe('/galleries', () => {
+    const uuid = uuidv4();
     let loginResponse;
     let token;
+
     after(async () => {
-      await knex.raw(`TRUNCATE TABLE ${GALLERIES_TABLE};`);
+      await knex.raw(`TRUNCATE table ${GALLERIES_TABLE}`);
+      await knex.raw(`TRUNCATE table ${USERS_TABLE}`);
     });
+
     before(async ()=> {
-      const hashedPassword= await bcrypt.hash(fixture.password, 10);
-      uuid = uuidv4();
+      const hashedPassword = await bcrypt.hash(fixture.password, 10);
       await knex.insert({
         uuid,
         email_address: fixture.email,
@@ -39,6 +41,12 @@ describe('galleries', () => {
         last_name: fixture.lastName,
         password: hashedPassword,
       }).into(USERS_TABLE);
+
+      await knex.insert({
+        uuid: fixture.id,
+        name: fixture.name,
+        user_id: uuid,
+      }).into(GALLERIES_TABLE);
 
       loginResponse = await chai
           .request(app)
@@ -49,7 +57,7 @@ describe('galleries', () => {
           });
     });
     it('should create new gallery if'+
-    ' provided with valid arguments', (done) => {
+    ' provided with valid arguments', () => {
       token = loginResponse.body.token;
       chai
           .request(app)
@@ -62,7 +70,6 @@ describe('galleries', () => {
             expect(res.status).to.be.equal(200);
             expect(res.body.message).to.be.equal(fixture.successMessage);
           });
-      done();
     });
   });
 });
