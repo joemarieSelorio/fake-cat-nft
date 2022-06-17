@@ -22,7 +22,7 @@ describe('/users', () => {
   before(async () => {
     await knex.raw('SET FOREIGN_KEY_CHECKS = 0');
   });
-  describe('/post/users', () => {
+  describe('POST: /users', () => {
     after(async () => {
       await knex.raw(`TRUNCATE table ${USERS_TABLE}`);
     });
@@ -41,7 +41,7 @@ describe('/users', () => {
     });
   });
 
-  describe('/users/:id/wallets', () => {
+  describe('GET: /users/:id/wallets', () => {
     let loginResponse;
     const uuid = uuidv4();
     after(async () => {
@@ -82,7 +82,7 @@ describe('/users', () => {
     });
   });
 
-  describe('/users/:id/assets', () => {
+  describe('GET: /users/:id/assets', () => {
     const uuid = uuidv4();
     let loginResponse;
     after(async () => {

@@ -57,19 +57,17 @@ describe('/galleries', () => {
           });
     });
     it('should create new gallery if'+
-    ' provided with valid arguments', () => {
+    ' provided with valid arguments', async () => {
       token = loginResponse.body.token;
-      chai
+      const response = await chai
           .request(app)
           .post('/galleries')
           .set('Authorization', 'Bearer ' + token)
           .send({
             name: fixture.name,
-          })
-          .end((err, res) => {
-            expect(res.status).to.be.equal(200);
-            expect(res.body.message).to.be.equal(fixture.successMessage);
           });
+      expect(response.status).to.be.equal(200);
+      expect(response.body.message).to.be.equal(fixture.successMessage);
     });
   });
 });

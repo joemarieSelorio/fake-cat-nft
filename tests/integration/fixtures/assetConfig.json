@@ -1,0 +1,20 @@
+{
+  "id": "12345-12345-12345",
+  "walletId": "1230809-1205455-4324234234",
+  "galleryId": "1230809-1205455-454545",
+  "assetId": "1230809asdasd-1205455-454545",
+  "offerId": "1230880980dasd-1205455-454545",
+  "galleryName": "test",
+  "email": "seloriojoemarie@gmail.com",
+  "firstName": "joemarie",
+  "lastName": "selorio",
+  "password": "testPassword",
+  "assetName": "Myasset",
+  "initialAmount": 50000,
+  "offeredAmount": 50000,
+  "imgUrl": "http://myasset.jpg",
+  "successMessage": "Successfully auctioned the asset",
+  "successOfferMessage": "Successfully sent offer",
+  "successGetOffersMessage": "Successfully retrieved offers",
+  "successAcceptedOffer": "Successfully accepted offer"
+}
