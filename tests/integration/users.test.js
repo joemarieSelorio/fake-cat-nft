@@ -27,8 +27,8 @@ describe('/users', () => {
       await knex.raw(`TRUNCATE table ${USERS_TABLE}`);
     });
     it('should create new user if'+
-    ' provided with valid arguments', () => {
-      chai
+    ' provided with valid arguments', async () => {
+      const response = await chai
           .request(app)
           .post('/users')
           .send({
@@ -36,11 +36,8 @@ describe('/users', () => {
             firstName: fixture.firstName,
             lastName: fixture.lastName,
             password: fixture.password,
-          })
-          .end((err, res) => {
-            expect(res.status).to.be.equal(200);
-            expect(res.body.message).to.be.equal(fixture.successMessage);
           });
+      expect(response.body.message).to.be.equal(fixture.successMessage);
     });
   });
 
